@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:habit_tracker/models/habit.dart';
 
 class HabitTile extends StatefulWidget {
-  const HabitTile({super.key, required this.name, required this.isCompleted});
+  const HabitTile({super.key, required this.habit, required this.notifyParent, required this.tileWidth});
 
-  final String name;
-  final bool isCompleted;
+  final Function() notifyParent;
+  final Habit habit;
+  final double tileWidth;
 
   @override
   State<HabitTile> createState() {
@@ -13,6 +15,13 @@ class HabitTile extends StatefulWidget {
 }
 
 class _HabitTileState extends State<HabitTile> {
+  var tileColor = Color.fromARGB(255, 0, 0, 0);
+
+  Color getTileColor() {
+    tileColor = widget.habit.isCompleted ? Color.fromARGB(255, 33, 33, 33) : Colors.black;
+    return tileColor;
+  }
+
   @override
   Widget build(context) {
     return Center(
@@ -20,25 +29,29 @@ class _HabitTileState extends State<HabitTile> {
           builder: (BuildContext context, BoxConstraints constraints) {
             return InkWell(
               onTap: () { 
-                  print("Tapped on container"); 
+                setState(() {
+                  widget.habit.isCompleted = !widget.habit.isCompleted;
+                });
+                widget.notifyParent();
               },
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: Colors.grey,
+                    color: Color.fromARGB(255, 33, 33, 33),
                   ),
-                  borderRadius: const BorderRadius.all(Radius.circular(15))
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  color: getTileColor(),
                 ),
-                height: MediaQuery.of(context).size.width/2*0.5,
-                width: MediaQuery.of(context).size.width/2*0.9,
+                height: MediaQuery.of(context).size.width * widget.tileWidth/2,
+                width: MediaQuery.of(context).size.width * widget.tileWidth,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (widget.isCompleted) 
+                    if (widget.habit.isCompleted) 
                       Padding(
-                        padding: const EdgeInsets.all(11.0),
+                        padding: const EdgeInsets.all(8),
                         child: Text(
-                          widget.name,
+                          widget.habit.name,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 13,
@@ -49,11 +62,11 @@ class _HabitTileState extends State<HabitTile> {
                           ),
                         ),
                       ),
-                    if (!widget.isCompleted) 
+                    if (!widget.habit.isCompleted) 
                       Padding(
-                        padding: const EdgeInsets.all(11.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          widget.name,
+                          widget.habit.name,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 13,
