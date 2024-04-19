@@ -1,104 +1,122 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:habit_tracker/habit_tile.dart';
-import 'package:habit_tracker/data/habits.dart';
+import 'package:habit_tracker/habits_screen/habit_list.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class HabitScreen extends StatefulWidget {
-  const HabitScreen({super.key});
+class HabitScreen extends StatelessWidget {
+  HabitScreen({super.key});
 
-  @override
-  State<HabitScreen> createState() {
-    return _HabitScreenState();
-  }
-}
 
-class _HabitScreenState extends State<HabitScreen> {
-  final double tileWidth = 0.47;
-
-  refresh() {
-    setState(() {
-      habits.sort((a, b) =>
-          a.isCompleted.toString().compareTo(b.isCompleted.toString()));
-    });
-  }
+  final PanelController _pc = new PanelController();
 
   @override
   Widget build(context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text("Today"),
-        titleTextStyle: TextStyle(
-          color: Color.fromARGB(255, 222, 222, 222),
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
-        actions: [
-          IconButton(
-            iconSize: MediaQuery.of(context).size.width * 0.1,
-            onPressed: () {
-              
-            },
-            style: OutlinedButton.styleFrom(
-              foregroundColor: Color.fromARGB(255, 222, 222, 222),
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    return GestureDetector(
+        onTap: () {
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        onPanUpdate: (details) {
+          // Swiping in right direction.
+          currentFocus.unfocus();
+        },
+        child: Scaffold(
+          backgroundColor: Colors.black,
+          appBar: AppBar(
+            backgroundColor: Colors.black,
+            title: Text("Today"),
+            titleTextStyle: TextStyle(
+              color: Color.fromARGB(255, 222, 222, 222),
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
-            icon: const Icon(Icons.add),
+            actions: [
+              IconButton(
+                iconSize: MediaQuery.of(context).size.width * 0.1,
+                onPressed: () => _pc.open(),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Color.fromARGB(255, 222, 222, 222),
+                ),
+                icon: const Icon(Icons.add),
+              ),
+            ],
           ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          Container(
-            //color: Colors.red,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (var i = 0; i < habits.length / 2; i++)
-                  Row(
+          body: Stack(
+            children: [
+              HabitList(),
+              SlidingUpPanel(
+                //backdropEnabled: true,
+                // backdropColor: Color.fromARGB(255, 53, 53, 53),
+                // backdropOpacity: 0.5,
+                controller: _pc,
+                minHeight: 0,
+                maxHeight: 790,
+                color: Colors.black,
+                boxShadow: const [
+                  BoxShadow(
+                    blurRadius: 30.0,
+                    color: Color.fromARGB(255, 60, 60, 60),
+                  ),
+                ],
+                borderRadius: const BorderRadius.all(Radius.circular(25)),
+                panel: Container(
+                  //color: Colors.red,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Padding(
-                        padding: EdgeInsets.all(
-                            MediaQuery.of(context).size.width *
-                                ((0.5 - tileWidth) / 2)),
-                        child: HabitTile(
-                          habit: habits[i * 2],
-                          notifyParent: refresh,
-                          tileWidth: tileWidth,
-                        ),
-                      ),
-                      if (i * 2 + 1 < habits.length)
-                        Padding(
-                          padding: EdgeInsets.all(
-                              MediaQuery.of(context).size.width *
-                                  ((0.5 - tileWidth) / 2)),
-                          child: HabitTile(
-                            habit: habits[i * 2 + 1],
-                            notifyParent: refresh,
-                            tileWidth: tileWidth,
+                        padding: EdgeInsets.all(25.0),
+                        child: Text(
+                          "Habit name",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 222, 222, 222),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 25.0, right: 25),
+                        child: TextField(
+                          cursorColor: Color.fromARGB(255, 222, 222, 222),
+                          decoration: InputDecoration(
+                            labelStyle: TextStyle(color: Colors.grey),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 222, 222, 222),
+                                  width: 1.0),
+                            ),
+                            border: OutlineInputBorder(),
+                            labelText: 'Habit name',
+                          ),
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 222, 222, 222),
+                          ),
+                        ),
+                      ),
+                      Spacer(),
+                      Padding(
+                        padding: EdgeInsets.all(25.0),
+                        child: OutlinedButton(
+                          onPressed: () {},
+                          child: const Text('Create'),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
-          SlidingUpPanel(
-            minHeight: 50,
-            maxHeight: 750,
-            color: Colors.black,
-            border: Border.all(
-                    color: Color.fromARGB(255, 255, 255, 255),
-                  ),
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            panel: Center(
-              child: Text("This is the sliding Widget"),
-            ),
-          ),
-        ],
-      ),
-    );
+        ));
   }
 }
