@@ -3,12 +3,24 @@
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/habits_screen/habit_list.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:habit_tracker/db_interface.dart';
+import 'package:habit_tracker/models/habit.dart';
 
-class HabitScreen extends StatelessWidget {
+class HabitScreen extends StatefulWidget {
   HabitScreen({super.key});
 
+  @override
+  State<HabitScreen> createState() {
+    return _HabitScreenState();
+  }
+}
 
+class _HabitScreenState extends State<HabitScreen> {
+
+  final DB db = DB();
   final PanelController _pc = new PanelController();
+  final TextEditingController habitNameController = TextEditingController();
+
 
   @override
   Widget build(context) {
@@ -81,6 +93,7 @@ class HabitScreen extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(left: 25.0, right: 25),
                         child: TextField(
+                          controller: habitNameController,
                           cursorColor: Color.fromARGB(255, 222, 222, 222),
                           decoration: InputDecoration(
                             labelStyle: TextStyle(color: Colors.grey),
@@ -101,7 +114,11 @@ class HabitScreen extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.all(25.0),
                         child: OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            db.insertHabit(Habit(habitNameController.text));
+                            db.getAllHabits();
+                              // Clean up the controller when the widget is disposed.
+                          },
                           child: const Text('Create'),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: Colors.white,
