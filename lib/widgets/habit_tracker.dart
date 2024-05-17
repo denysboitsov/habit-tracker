@@ -28,13 +28,16 @@ class _HabitTrackerState extends State<HabitTracker> {
     Habit(
       name: "Feed Spruce",
     ),
+    Habit(
+      name: "Feed Maggy",
+    ),
   ];
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Habit Tracker'),
+        title: Text('Today'),
         actions: [
           IconButton(onPressed: _openAddHabitOverlay, icon: Icon(Icons.add)),
         ],
