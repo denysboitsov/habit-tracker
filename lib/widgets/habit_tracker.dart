@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/models/habit.dart';
 import 'package:habit_tracker/widgets/habits_list/habits_list.dart';
+import 'package:habit_tracker/widgets/new_habit/new_habit.dart';
 
 class HabitTracker extends StatefulWidget {
   const HabitTracker({super.key});
@@ -12,6 +13,13 @@ class HabitTracker extends StatefulWidget {
 }
 
 class _HabitTrackerState extends State<HabitTracker> {
+
+  void _openAddHabitOverlay() {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => NewHabit(),
+    );
+  }
 
   final List<Habit> _registeredHabits = [
     Habit(
@@ -27,6 +35,9 @@ class _HabitTrackerState extends State<HabitTracker> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Habit Tracker'),
+        actions: [
+          IconButton(onPressed: _openAddHabitOverlay, icon: Icon(Icons.add)),
+        ],
       ),
       body: Column(
         children: [
