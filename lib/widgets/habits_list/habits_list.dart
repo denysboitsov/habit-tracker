@@ -9,9 +9,15 @@ class HabitsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: habits.length,
-      itemBuilder: (ctx, index) => HabitsItem(habits[index]),
+    return GridView.count(
+      // Create a grid with 2 columns. If you change the scrollDirection to
+      // horizontal, this produces 2 rows.
+      crossAxisCount: 2,
+      // Generate 100 widgets that display their index in the List.
+      children: [
+        ...habits.map((habit) => HabitsItem(habit)),
+      ],
+      childAspectRatio: (10 / 5),
     );
   }
 }
