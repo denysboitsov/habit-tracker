@@ -24,12 +24,18 @@ class _HabitTrackerState extends State<HabitTracker> {
   final List<Habit> _registeredHabits = [
     Habit(
       name: "Workout",
+      startDate: DateTime.now(),
+      endDate: DateTime.now(),
     ),
     Habit(
       name: "Feed Spruce",
+      startDate: DateTime.now(),
+      endDate: DateTime.now(),
     ),
     Habit(
       name: "Feed Maggy",
+      startDate: DateTime.now(),
+      endDate: DateTime.now(),
     ),
   ];
   

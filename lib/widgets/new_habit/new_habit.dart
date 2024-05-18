@@ -85,7 +85,7 @@ class _NewHabitState extends State<NewHabit> {
                 onPressed: () {
                   print(_nameController.text);
                 },
-                child: Text('Save expense'),
+                child: Text('Save'),
               ),
               const Spacer(),
               ElevatedButton(
