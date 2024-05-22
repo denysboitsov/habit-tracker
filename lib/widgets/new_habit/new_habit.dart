@@ -5,7 +5,9 @@ import 'package:intl/intl.dart';
 final formatter = DateFormat.yMd();
 
 class NewHabit extends StatefulWidget {
-  const NewHabit({super.key});
+  const NewHabit({super.key,required this.onAddHabit});
+
+  final void Function(Habit habit) onAddHabit;
 
   @override
   State<StatefulWidget> createState() {
@@ -15,8 +17,37 @@ class NewHabit extends StatefulWidget {
 
 class _NewHabitState extends State<NewHabit> {
   final _nameController = TextEditingController();
-  DateTime? _selectedStartDate; 
-  DateTime? _selectedEndDate; 
+  DateTime? _selectedStartDate = DateTime.now(); 
+  DateTime? _selectedEndDate;
+
+  void _submitNewHabit() {
+    if (_nameController.text.trim().isEmpty ||
+        _selectedStartDate == null ||
+        _selectedEndDate == null) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+            title: Text('Invalid input'),
+            content: const Text(
+                'Please make sure a valid name, start and end date was entered.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                },
+                child: Text("Okay"),
+              )
+            ]),
+      );
+      return;
+    }
+    widget.onAddHabit(Habit(
+      name: _nameController.text,
+      startDate: _selectedStartDate!,
+      endDate: _selectedEndDate!,
+    ));
+    Navigator.pop(context);
+  } 
 
   void _startDatePicker() async {
     final now = DateTime.now();
@@ -45,7 +76,7 @@ class _NewHabitState extends State<NewHabit> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.fromLTRB(16, 48, 16, 16),
         child: Column(
           children: [
             TextField(
@@ -81,20 +112,18 @@ class _NewHabitState extends State<NewHabit> {
             ),
             SizedBox(height: 20,),
             Row(children: [
-              ElevatedButton(
-                onPressed: () {
-                  print(_nameController.text);
-                },
-                child: Text('Save'),
-              ),
-              const Spacer(),
-              ElevatedButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(
                       context); // removes the current overlay from the screen
                 },
                 child: Text('Cancel'),
-              )
+              ),
+              const Spacer(),
+              ElevatedButton(
+                onPressed: _submitNewHabit,
+                child: Text('Save'),
+              ),
             ]),
           ],
         ));
