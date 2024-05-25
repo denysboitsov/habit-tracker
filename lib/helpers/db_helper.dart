@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:habit_tracker/models/habit.dart';
@@ -24,7 +25,6 @@ class DatabaseHelper {
           CREATE TABLE Habits (
             HabitID TEXT PRIMARY KEY, 
             HabitName TEXT NOT NULL, 
-            Description TEXT, 
             CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
           );
         ''');
@@ -38,7 +38,6 @@ class DatabaseHelper {
             UNIQUE (HabitID, CompletionDate)
           );
         ''');
-        print("DB provisioned.");
       },
       version: 1,
     );
@@ -64,11 +63,6 @@ class DatabaseHelper {
       });
     }
   }
-  Future<void> printTables() async {
-    final db = await database;
-    var data = await db.rawQuery('SELECT * FROM Completions');
-    print(data.toString());
-  }
   Future<void> addHabit(String habitId, String habitName) async {
     print("Adding new habit in DB");
     final db = await database;
@@ -78,18 +72,20 @@ class DatabaseHelper {
     });
   }
   Future<List<Habit>> getHabits() async {
-    print("Adding new habit in DB");
+    String date = DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 1)));
     final db = await database;
-    var data = await db.rawQuery('SELECT * FROM Habits');
-    print(data.toString());
-    return List.generate(data.length, (i) {
+    var habits = await db.rawQuery('SELECT h.HabitID, h.HabitName, c.CompletionDate, c.Status  FROM Habits h LEFT JOIN Completions c ON h.HabitID = c.HabitID AND c.CompletionDate = "$date";');
+
+    final habitsList = List.generate(habits.length, (i) {
       return Habit(
-        name: data[i]['name'].toString(),
+        id: habits[i]['HabitID'].toString(),
+        name: habits[i]['HabitName'].toString(),
         startDate: DateTime(DateTime.april),
         endDate: DateTime(DateTime.august),
-        isCompleted: false,
+        isCompleted: habits[i]['Status'].toString() == "1" ? true : false,
         // Same for the other properties
       );
     });
+    return habitsList;
   }
 }

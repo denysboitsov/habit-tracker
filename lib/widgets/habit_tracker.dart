@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:habit_tracker/models/habit.dart';
 import 'package:habit_tracker/widgets/habits_list/habits_list.dart';
 import 'package:habit_tracker/widgets/new_habit/new_habit.dart';
+import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqlite_api.dart';
 import 'package:path/path.dart' as path;
+import 'package:habit_tracker/helpers/db_helper.dart';
 
 class HabitTracker extends StatefulWidget {
   const HabitTracker({super.key});
@@ -27,10 +29,12 @@ class _HabitTrackerState extends State<HabitTracker> {
   }
 
   void _removeHabit(Habit habit) {
+    String date = DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 1)));
     final habitIndex = _registeredHabits.indexOf(habit);
     setState(() {
-      _registeredHabits.remove(habit);
+      habit.isCompleted = !habit.isCompleted;
     });
+    DatabaseHelper().toggleCompletion(habit.id, date, habit.isCompleted);
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -40,8 +44,9 @@ class _HabitTrackerState extends State<HabitTracker> {
           label: 'Undo',
           onPressed: () {
             setState(() {
-              _registeredHabits.insert(habitIndex, habit);
+              habit.isCompleted = !habit.isCompleted;
             });
+            DatabaseHelper().toggleCompletion(habit.id, date, habit.isCompleted);
           },
         ),
       ),
@@ -51,20 +56,7 @@ class _HabitTrackerState extends State<HabitTracker> {
   Future<void> _addHabit(Habit habit) async {
     setState(() {
       _registeredHabits.add(habit);
-    });
-    final dbPath = await sql.getDatabasesPath();
-    final db = await sql.openDatabase(
-      //path.join(dbPath, 'habits.db'),
-      '/Users/denysartiukhov/Desktop/flutter_projects/habit-tracker/habits.db',
-      onCreate: (db, version) {
-        return db.execute("CREATE TABLE Habits (HabitID TEXT PRIMARY KEY, HabitName TEXT NOT NULL, Description TEXT, CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP);");
-      },
-      version: 1,
-    );
-    db.insert('habits', {
-      'HabitID': habit.id,
-      'HabitName': habit.name,
-      'Description': "",
+      DatabaseHelper().addHabit(habit.id, habit.name);
     });
   }
 
@@ -73,16 +65,19 @@ class _HabitTrackerState extends State<HabitTracker> {
       name: "Workout",
       startDate: DateTime.now(),
       endDate: DateTime.now(),
+      isCompleted: false,
     ),
     Habit(
       name: "Feed Spruce",
       startDate: DateTime.now(),
       endDate: DateTime.now(),
+      isCompleted: false,
     ),
     Habit(
       name: "Feed Maggy",
       startDate: DateTime.now(),
       endDate: DateTime.now(),
+      isCompleted: false,
     ),
   ];
 
@@ -103,8 +98,8 @@ class _HabitTrackerState extends State<HabitTracker> {
         children: [
           Expanded(
             child: HabitsList(
-              habits: _registeredHabits,
               onRemoveHabit: _removeHabit,
+              fetchHabits: DatabaseHelper().getHabits,
             ),
           ),
         ],

@@ -45,6 +45,7 @@ class _NewHabitState extends State<NewHabit> {
       name: _nameController.text,
       startDate: _selectedStartDate!,
       endDate: _selectedEndDate!,
+      isCompleted: false,
     ));
     Navigator.pop(context);
   } 
