@@ -4,10 +4,39 @@ import 'package:flutter/material.dart';
 
 class HabitsList extends StatelessWidget {
   const HabitsList(
-      {super.key, required this.onRemoveHabit, required this.fetchHabits});
+      {super.key, required this.onToggleHabit, required this.onRemoveHabit, required this.fetchHabits,});
 
+  final void Function(Habit habit) onToggleHabit;
   final void Function(Habit habit) onRemoveHabit;
   final Future<List<Habit>> Function() fetchHabits;
+
+  void _onEditHabit(context, Habit habit) {
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final result = showMenu(
+        context: context,
+        position: RelativeRect.fromRect(
+          Rect.fromPoints(
+            Offset(0, 0), // Offset from the top-left corner
+            Offset(overlay.size.width, overlay.size.height),
+          ),
+          Offset.zero & overlay.size,),
+        items: [
+          const PopupMenuItem<String>(
+                  value: 'edit',
+                  child: ListTile(
+                    leading: Icon(Icons.edit),
+                    title: Text('Edit'),
+                  ),
+                ),
+          const PopupMenuItem<String>(
+                  value: 'delete',
+                  child: ListTile(
+                    leading: Icon(Icons.delete),
+                    title: Text('Delete'),
+                  ),
+                ),
+        ]);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +50,7 @@ class HabitsList extends StatelessWidget {
         } else {
           final habits = snapshot.data!;
           habits.sort((a, b) {
-            if(!b.isCompleted) {
+            if (!b.isCompleted) {
               return 1;
             }
             return -1;
@@ -33,15 +62,7 @@ class HabitsList extends StatelessWidget {
             childAspectRatio: (10 / 5),
             // Generate 100 widgets that display their index in the List.
             children: [
-              ...habits.map((habit) => GestureDetector(
-                    onTap: () {
-                      onRemoveHabit(habit);
-                    },
-                    onLongPress: () {
-                      //onRemoveHabit(habit);
-                    },
-                    child: HabitsItem(habit),
-                  )),
+              ...habits.map((habit) => HabitsItem(habit, onToggleHabit: onToggleHabit, onRemoveHabit: onRemoveHabit)),
             ],
           );
         }

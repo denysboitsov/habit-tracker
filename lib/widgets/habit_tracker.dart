@@ -28,9 +28,8 @@ class _HabitTrackerState extends State<HabitTracker> {
     );
   }
 
-  void _removeHabit(Habit habit) {
-    String date = DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 1)));
-    final habitIndex = _registeredHabits.indexOf(habit);
+  void _toggleHabit(Habit habit) {
+    String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
     setState(() {
       habit.isCompleted = !habit.isCompleted;
     });
@@ -55,25 +54,15 @@ class _HabitTrackerState extends State<HabitTracker> {
 
   Future<void> _addHabit(Habit habit) async {
     setState(() {
-      _registeredHabits.add(habit);
       DatabaseHelper().addHabit(habit.id, habit.name);
     });
   }
 
-  final List<Habit> _registeredHabits = [
-    Habit(
-      name: "Workout",
-      isCompleted: false,
-    ),
-    Habit(
-      name: "Feed Spruce",
-      isCompleted: false,
-    ),
-    Habit(
-      name: "Feed Maggy",
-      isCompleted: false,
-    ),
-  ];
+  Future<void> _removeHabit(Habit habit) async {
+    await DatabaseHelper().removeHabit(habit.id);
+    setState(() {
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +81,7 @@ class _HabitTrackerState extends State<HabitTracker> {
         children: [
           Expanded(
             child: HabitsList(
+              onToggleHabit: _toggleHabit,
               onRemoveHabit: _removeHabit,
               fetchHabits: DatabaseHelper().getHabits,
             ),

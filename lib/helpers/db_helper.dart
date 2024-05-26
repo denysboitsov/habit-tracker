@@ -71,8 +71,19 @@ class DatabaseHelper {
       'HabitName': habitName,
     });
   }
+
+  Future<void> removeHabit(String habitId) async {
+    final db = await database;
+    await db.rawQuery('''
+      DELETE FROM Completions WHERE HabitID = "$habitId";
+    ''');
+    await db.rawQuery('''
+      DELETE FROM Habits WHERE HabitID = "$habitId";
+    ''');
+  }
+
   Future<List<Habit>> getHabits() async {
-    String date = DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 1)));
+    String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
     final db = await database;
     var habits = await db.rawQuery('SELECT h.HabitID, h.HabitName, c.CompletionDate, c.Status  FROM Habits h LEFT JOIN Completions c ON h.HabitID = c.HabitID AND c.CompletionDate = "$date";');
 
