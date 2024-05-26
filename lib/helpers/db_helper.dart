@@ -80,8 +80,6 @@ class DatabaseHelper {
       return Habit(
         id: habits[i]['HabitID'].toString(),
         name: habits[i]['HabitName'].toString(),
-        startDate: DateTime(DateTime.april),
-        endDate: DateTime(DateTime.august),
         isCompleted: habits[i]['Status'].toString() == "1" ? true : false,
         // Same for the other properties
       );

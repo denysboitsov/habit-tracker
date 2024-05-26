@@ -39,7 +39,7 @@ class _HabitTrackerState extends State<HabitTracker> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(seconds: 5),
-        content: const Text("Habit deleted"),
+        content: habit.isCompleted ? Text("Habit checked.") : Text("Habit unchecked."),
         action: SnackBarAction(
           label: 'Undo',
           onPressed: () {
@@ -63,20 +63,14 @@ class _HabitTrackerState extends State<HabitTracker> {
   final List<Habit> _registeredHabits = [
     Habit(
       name: "Workout",
-      startDate: DateTime.now(),
-      endDate: DateTime.now(),
       isCompleted: false,
     ),
     Habit(
       name: "Feed Spruce",
-      startDate: DateTime.now(),
-      endDate: DateTime.now(),
       isCompleted: false,
     ),
     Habit(
       name: "Feed Maggy",
-      startDate: DateTime.now(),
-      endDate: DateTime.now(),
       isCompleted: false,
     ),
   ];

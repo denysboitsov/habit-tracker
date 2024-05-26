@@ -37,6 +37,9 @@ class HabitsList extends StatelessWidget {
                     onTap: () {
                       onRemoveHabit(habit);
                     },
+                    onLongPress: () {
+                      //onRemoveHabit(habit);
+                    },
                     child: HabitsItem(habit),
                   )),
             ],

@@ -9,7 +9,7 @@ class HabitsItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card.outlined(
-      color: habit.isCompleted ? const Color.fromARGB(255, 129, 129, 129) : const Color.fromARGB(255, 208, 208, 208),
+      color: habit.isCompleted ? Color.fromARGB(255, 204, 204, 204) : null,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
