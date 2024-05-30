@@ -58,6 +58,12 @@ class _HabitTrackerState extends State<HabitTracker> {
     });
   }
 
+  Future<void> _updateHabit(Habit habit) async {
+    setState(() {
+      DatabaseHelper().updateHabit(habit.id, habit.name);
+    });
+  }
+
   Future<void> _removeHabit(Habit habit) async {
     await DatabaseHelper().removeHabit(habit.id);
     setState(() {
@@ -84,6 +90,7 @@ class _HabitTrackerState extends State<HabitTracker> {
               onToggleHabit: _toggleHabit,
               onRemoveHabit: _removeHabit,
               fetchHabits: DatabaseHelper().getHabits,
+              onUpdateHabit: _updateHabit,
             ),
           ),
         ],

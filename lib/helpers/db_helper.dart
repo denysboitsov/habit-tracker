@@ -72,6 +72,12 @@ class DatabaseHelper {
     });
   }
 
+  Future<void> updateHabit(String habitId, String habitName) async {
+    print("Adding new habit in DB");
+    final db = await database;
+    await db.rawQuery('UPDATE Habits SET HabitName = "$habitName" WHERE HabitID = "$habitId";');
+  }
+
   Future<void> removeHabit(String habitId) async {
     final db = await database;
     await db.rawQuery('''

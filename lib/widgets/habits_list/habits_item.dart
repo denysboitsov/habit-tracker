@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/models/habit.dart';
+import 'package:habit_tracker/widgets/edit_habit/edit_habit.dart';
+import 'package:habit_tracker/widgets/habits_list/last_week_heatmap/last_week_heatmap.dart';
 
 class HabitsItem extends StatelessWidget {
-  const HabitsItem(this.habit, {super.key, required this.onToggleHabit,required this.onRemoveHabit,});
-  
+  const HabitsItem(
+    this.habit, {
+    super.key,
+    required this.onToggleHabit,
+    required this.onRemoveHabit,
+    required this.onUpdateHabit,
+  });
+
+  final void Function(Habit habit) onUpdateHabit;
   final void Function(Habit habit) onToggleHabit;
   final void Function(Habit habit) onRemoveHabit;
   final Habit habit;
@@ -45,13 +54,17 @@ class HabitsItem extends StatelessWidget {
 
   void _onEditHabit(context, Habit habit) async {
     final RenderBox cardRenderBox = context.findRenderObject() as RenderBox;
-    final RenderBox overlayRenderBox = Overlay.of(context).context.findRenderObject() as RenderBox;
-    final Offset cardPosition = cardRenderBox.localToGlobal(Offset.zero, ancestor: overlayRenderBox);
+    final RenderBox overlayRenderBox =
+        Overlay.of(context).context.findRenderObject() as RenderBox;
+    final Offset cardPosition =
+        cardRenderBox.localToGlobal(Offset.zero, ancestor: overlayRenderBox);
     final RelativeRect position = RelativeRect.fromLTRB(
       cardPosition.dx,
       cardPosition.dy + cardRenderBox.size.height,
       overlayRenderBox.size.width - cardPosition.dx - cardRenderBox.size.width,
-      overlayRenderBox.size.height - cardPosition.dy - cardRenderBox.size.height,
+      overlayRenderBox.size.height -
+          cardPosition.dy -
+          cardRenderBox.size.height,
     );
 
     await showMenu<String>(
@@ -70,6 +83,15 @@ class HabitsItem extends StatelessWidget {
     ).then((value) {
       if (value == 'delete') {
         _showDeleteConfirmationDialog(context);
+      } else if (value == 'edit') {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (ctx) => EditHabit(
+            habit: habit,
+            onUpdateHabit: onUpdateHabit,
+          ),
+        );
       }
     });
   }
@@ -92,7 +114,17 @@ class HabitsItem extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Text(habit.name),
+              Row(
+                children: [
+                  Text(habit.name),
+                ],
+              ),
+              SizedBox(height: 20,),
+              Row(
+                children: [
+                  LastWeekHeatmap(habit),
+                ],
+              ),
             ],
           ),
         ),
