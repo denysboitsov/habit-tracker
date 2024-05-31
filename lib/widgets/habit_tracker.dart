@@ -78,6 +78,7 @@ class _HabitTrackerState extends State<HabitTracker> {
     // });
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Colors.white,
         title: Text('Today'),
         actions: [
           IconButton(onPressed: _openAddHabitOverlay, icon: Icon(Icons.add)),
