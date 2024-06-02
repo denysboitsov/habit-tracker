@@ -56,15 +56,18 @@ class HabitsList extends StatelessWidget {
             }
             return -1;
           });
-          return GridView.count(
-            // Create a grid with 2 columns. If you change the scrollDirection to
-            // horizontal, this produces 2 rows.
-            crossAxisCount: 2,
-            childAspectRatio: (10 / 5),
-            // Generate 100 widgets that display their index in the List.
-            children: [
-              ...habits.map((habit) => HabitsItem(habit, onToggleHabit: onToggleHabit, onRemoveHabit: onRemoveHabit, onUpdateHabit: onUpdateHabit,)),
-            ],
+          return Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: GridView.count(
+              // Create a grid with 2 columns. If you change the scrollDirection to
+              // horizontal, this produces 2 rows.
+              crossAxisCount: 2,
+              childAspectRatio: (10 / 5),
+              // Generate 100 widgets that display their index in the List.
+              children: [
+                ...habits.map((habit) => HabitsItem(habit, onToggleHabit: onToggleHabit, onRemoveHabit: onRemoveHabit, onUpdateHabit: onUpdateHabit,)),
+              ],
+            ),
           );
         }
       },

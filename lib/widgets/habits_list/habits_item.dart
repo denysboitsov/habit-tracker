@@ -101,7 +101,7 @@ class HabitsItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      child: CupertinoContextMenu(
+      child: CupertinoContextMenu.builder(
         enableHapticFeedback: true,
         actions: <Widget>[
           CupertinoContextMenuAction(
@@ -130,40 +130,46 @@ class HabitsItem extends StatelessWidget {
             child: const Text('Delete'),
           ),
         ],
-        child: GestureDetector(
-          onTap: () {
-            onToggleHabit(habit);
-          },
-          child: Card.outlined(
-            color:
-                habit.isCompleted ? Color.fromARGB(255, 204, 204, 204) : null,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 16,
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Text(habit.name),
-                    ],
+        builder: (BuildContext context, Animation<double> animation) {
+          return GestureDetector(
+            onTap: () {
+              onToggleHabit(habit);
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.48,
+              height: MediaQuery.of(context).size.width * 0.24,
+              child: Card.outlined(
+                color:
+                    habit.isCompleted ? Color.fromARGB(255, 204, 204, 204) : null,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
+                  child: Column(
                     children: [
-                      LastWeekHeatmap(
-                        habit,
+                      Row(
+                        children: [
+                          Text(habit.name),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          LastWeekHeatmap(
+                            habit,
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        }
       ),
     );
   }
