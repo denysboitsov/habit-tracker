@@ -1,11 +1,11 @@
 import 'package:habit_tracker/models/habit.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/cupertino.dart';
 
 final formatter = DateFormat.yMd();
 
 class NewHabit extends StatefulWidget {
-  const NewHabit({super.key,required this.onAddHabit});
+  const NewHabit({super.key, required this.onAddHabit});
 
   final void Function(Habit habit) onAddHabit;
 
@@ -20,20 +20,21 @@ class _NewHabitState extends State<NewHabit> {
 
   void _submitNewHabit() {
     if (_nameController.text.trim().isEmpty) {
-      showDialog(
+      showCupertinoDialog(
         context: context,
-        builder: (ctx) => AlertDialog(
-            title: Text('Invalid input'),
-            content: const Text(
-                'Please make sure a valid name was entered.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(ctx);
-                },
-                child: Text("Okay"),
-              )
-            ]),
+        builder: (BuildContext ctx) => CupertinoAlertDialog(
+          title: const Text('Invalid input'),
+          content: const Text('Please make sure a valid name was entered.'),
+          actions: <CupertinoDialogAction>[
+            CupertinoDialogAction(
+              isDestructiveAction: false,
+              onPressed: () {
+                Navigator.pop(ctx);
+              },
+              child: const Text('Okay'),
+            ),
+          ],
+        ),
       );
       return;
     }
@@ -42,7 +43,7 @@ class _NewHabitState extends State<NewHabit> {
       isCompleted: false,
     ));
     Navigator.pop(context);
-  } 
+  }
 
   @override
   void dispose() {
@@ -52,34 +53,65 @@ class _NewHabitState extends State<NewHabit> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.fromLTRB(16, 48, 16, 16),
-        child: Column(
-          children: [
-            TextField(
-              controller: _nameController,
-              maxLength: 50,
-              //keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                label: Text("Name"),
+    return Container(
+      decoration: BoxDecoration(
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                child: CupertinoButton(
+                  child: Text('Cancel'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ),
+              Container(
+                child: Text(
+                  "Add Habit",
+                  style: CupertinoTheme.of(context).textTheme.navTitleTextStyle,
+                ),
+              ),
+              Container(
+                child: CupertinoButton(
+                  child: Text('Save'),
+                  onPressed: () {
+                    _submitNewHabit();
+                  },
+                ),
+              ),
+            ],
+          ),
+          SafeArea(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: CupertinoTextField(
+                    maxLength: 50,
+                    controller: _nameController,
+                    placeholder: 'Name',
+                    padding: EdgeInsets.all(16.0),
+                  ),
+                ),
+                SizedBox(height: 100.0),
+              ],
             ),
-            SizedBox(height: 20,),
-            Row(children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(
-                      context); // removes the current overlay from the screen
-                },
-                child: Text('Cancel'),
-              ),
-              const Spacer(),
-              ElevatedButton(
-                onPressed: _submitNewHabit,
-                child: Text('Save'),
-              ),
-            ]),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }

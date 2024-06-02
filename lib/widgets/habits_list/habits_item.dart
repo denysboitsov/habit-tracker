@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:habit_tracker/helpers/db_helper.dart';
 import 'package:habit_tracker/models/habit.dart';
 import 'package:habit_tracker/widgets/edit_habit/edit_habit.dart';
 import 'package:habit_tracker/widgets/habits_list/last_week_heatmap/last_week_heatmap.dart';
+import 'package:flutter/cupertino.dart';
 
 class HabitsItem extends StatelessWidget {
   const HabitsItem(
@@ -98,34 +100,68 @@ class HabitsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        onToggleHabit(habit);
-      },
-      onLongPress: () {
-        _onEditHabit(context, habit);
-      },
-      child: Card.outlined(
-        color: habit.isCompleted ? Color.fromARGB(255, 204, 204, 204) : null,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 16,
+    return SizedBox(
+      child: CupertinoContextMenu(
+        enableHapticFeedback: true,
+        actions: <Widget>[
+          CupertinoContextMenuAction(
+            onPressed: () {
+              Navigator.pop(context);
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (ctx) => EditHabit(
+                  habit: habit,
+                  onUpdateHabit: onUpdateHabit,
+                ),
+              );
+            },
+            isDefaultAction: true,
+            trailingIcon: CupertinoIcons.doc_on_clipboard_fill,
+            child: const Text('Edit'),
           ),
-          child: Column(
-            children: [
-              Row(
+          CupertinoContextMenuAction(
+            onPressed: () {
+              Navigator.pop(context);
+              _showDeleteConfirmationDialog(context);
+            },
+            isDestructiveAction: true,
+            trailingIcon: CupertinoIcons.delete,
+            child: const Text('Delete'),
+          ),
+        ],
+        child: GestureDetector(
+          onTap: () {
+            onToggleHabit(habit);
+          },
+          child: Card.outlined(
+            color:
+                habit.isCompleted ? Color.fromARGB(255, 204, 204, 204) : null,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 16,
+              ),
+              child: Column(
                 children: [
-                  Text(habit.name),
+                  Row(
+                    children: [
+                      Text(habit.name),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      LastWeekHeatmap(
+                        habit,
+                      ),
+                    ],
+                  ),
                 ],
               ),
-              SizedBox(height: 20,),
-              Row(
-                children: [
-                  LastWeekHeatmap(habit),
-                ],
-              ),
-            ],
+            ),
           ),
         ),
       ),

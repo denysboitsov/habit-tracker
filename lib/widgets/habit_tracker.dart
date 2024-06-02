@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+
 import 'package:habit_tracker/models/habit.dart';
 import 'package:habit_tracker/widgets/habits_list/habits_list.dart';
 import 'package:habit_tracker/widgets/new_habit/new_habit.dart';
@@ -7,6 +7,7 @@ import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqlite_api.dart';
 import 'package:path/path.dart' as path;
 import 'package:habit_tracker/helpers/db_helper.dart';
+import 'package:flutter/cupertino.dart';
 
 class HabitTracker extends StatefulWidget {
   const HabitTracker({super.key});
@@ -19,12 +20,75 @@ class HabitTracker extends StatefulWidget {
 
 class _HabitTrackerState extends State<HabitTracker> {
   void _openAddHabitOverlay() {
-    showModalBottomSheet(
+    showCupertinoModalPopup(
       context: context,
-      isScrollControlled: true,
-      builder: (ctx) => NewHabit(
-        onAddHabit: _addHabit,
-      ),
+      builder: (context) {
+        return NewHabit(onAddHabit: _addHabit);
+        // return Container(
+        //   decoration: BoxDecoration(
+        //     color: CupertinoColors.systemBackground.resolveFrom(context),
+        //     borderRadius: BorderRadius.only(
+        //       topLeft: Radius.circular(20),
+        //       topRight: Radius.circular(20),
+        //     ),
+        //   ),
+        //   padding: EdgeInsets.only(
+        //     bottom: MediaQuery.of(context).viewInsets.bottom,
+        //   ),
+        //   child: Column(
+        //     mainAxisSize: MainAxisSize.min,
+        //     children: [
+        //       Row(
+        //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //         children: [
+        //           Container(
+        //             child: CupertinoButton(
+        //               child: Text('Cancel'),
+        //               onPressed: () {
+        //                 Navigator.pop(context);
+        //               },
+        //             ),
+        //           ),
+        //           Container(
+        //             child: Text(
+        //               "Add Habit",
+        //               style: CupertinoTheme.of(context)
+        //                   .textTheme
+        //                   .navTitleTextStyle,
+        //             ),
+        //           ),
+        //           Container(
+        //             child: CupertinoButton(
+        //               child: Text('Save'),
+        //               onPressed: () {
+        //                 Navigator.pop(context);
+        //               },
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //       SafeArea(
+        //         child: Column(
+        //           children: [
+        //             Padding(
+        //               padding: const EdgeInsets.symmetric(horizontal: 20),
+        //               child: CupertinoTextField(
+        //                 placeholder: 'Enter habit name',
+        //                 padding: EdgeInsets.all(16.0),
+        //               ),
+        //             ),
+        //             SizedBox(height: 100.0),
+        //           ],
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // );
+      },
+      //isScrollControlled: true,
+      // builder: (ctx) => NewHabit(
+      //   onAddHabit: _addHabit,
+      // ),
     );
   }
 
@@ -34,22 +98,25 @@ class _HabitTrackerState extends State<HabitTracker> {
       habit.isCompleted = !habit.isCompleted;
     });
     DatabaseHelper().toggleCompletion(habit.id, date, habit.isCompleted);
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: const Duration(seconds: 5),
-        content: habit.isCompleted ? Text("Habit checked.") : Text("Habit unchecked."),
-        action: SnackBarAction(
-          label: 'Undo',
-          onPressed: () {
-            setState(() {
-              habit.isCompleted = !habit.isCompleted;
-            });
-            DatabaseHelper().toggleCompletion(habit.id, date, habit.isCompleted);
-          },
-        ),
-      ),
-    );
+    // ScaffoldMessenger.of(context).clearSnackBars();
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(
+    //     duration: const Duration(seconds: 5),
+    //     content: habit.isCompleted
+    //         ? Text("Habit checked.")
+    //         : Text("Habit unchecked."),
+    //     action: SnackBarAction(
+    //       label: 'Undo',
+    //       onPressed: () {
+    //         setState(() {
+    //           habit.isCompleted = !habit.isCompleted;
+    //         });
+    //         DatabaseHelper()
+    //             .toggleCompletion(habit.id, date, habit.isCompleted);
+    //       },
+    //     ),
+    //   ),
+    // );
   }
 
   Future<void> _addHabit(Habit habit) async {
@@ -66,8 +133,7 @@ class _HabitTrackerState extends State<HabitTracker> {
 
   Future<void> _removeHabit(Habit habit) async {
     await DatabaseHelper().removeHabit(habit.id);
-    setState(() {
-    });
+    setState(() {});
   }
 
   @override
@@ -76,15 +142,20 @@ class _HabitTrackerState extends State<HabitTracker> {
     //   print("test");
     //   setState(() {});
     // });
-    return Scaffold(
-      appBar: AppBar(
-        surfaceTintColor: Colors.white,
-        title: Text('Today'),
-        actions: [
-          IconButton(onPressed: _openAddHabitOverlay, icon: Icon(Icons.add)),
-        ],
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text('Today'),
+        trailing: GestureDetector(
+          onTap: () {
+            _openAddHabitOverlay();
+          },
+          child: Icon(
+            CupertinoIcons.add,
+            color: CupertinoColors.black,
+          ),
+        ),
       ),
-      body: Column(
+      child: Column(
         children: [
           Expanded(
             child: HabitsList(
