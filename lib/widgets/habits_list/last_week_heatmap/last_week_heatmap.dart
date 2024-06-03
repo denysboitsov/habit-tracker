@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:habit_tracker/models/habit.dart';
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/models/completion.dart';
@@ -24,7 +25,87 @@ class LastWeekHeatmap extends StatelessWidget {
           DateFormat('yyyy-MM-dd').format(DateTime.now())),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Row();
+          return Row(
+            children: [
+              Container(
+                width: 15,
+                height: 15,
+                decoration: BoxDecoration(
+                    color: Color(0xFF0E3311).withOpacity(0),
+                    border: Border.all(color: CupertinoTheme.of(context).primaryColor),
+                    borderRadius: BorderRadius.all(Radius.circular(4))),
+              ),
+              SizedBox(
+                width: 3,
+              ),
+              Container(
+                width: 15,
+                height: 15,
+                decoration: BoxDecoration(
+                    color: Color(0xFF0E3311).withOpacity(0),
+                    border: Border.all(color:CupertinoTheme.of(context).primaryColor),
+                    borderRadius: BorderRadius.all(Radius.circular(4))),
+              ),
+              SizedBox(
+                width: 3,
+              ),
+              Container(
+                width: 15,
+                height: 15,
+                decoration: BoxDecoration(
+                    color: Color(0xFF0E3311).withOpacity(0),
+                    border: Border.all(color: Colors.blueAccent),
+                    borderRadius: BorderRadius.all(Radius.circular(4))),
+              ),
+              SizedBox(
+                width: 3,
+              ),
+              Container(
+                width: 15,
+                height: 15,
+                decoration: BoxDecoration(
+                    color: Color(0xFF0E3311).withOpacity(0),
+                    border: Border.all(color: Colors.blueAccent),
+                    borderRadius: BorderRadius.all(Radius.circular(4))),
+              ),
+              SizedBox(
+                width: 3,
+              ),
+              Container(
+                width: 15,
+                height: 15,
+                decoration: BoxDecoration(
+                    color: Color(0xFF0E3311).withOpacity(0),
+                    border: Border.all(color: Colors.blueAccent),
+                    borderRadius: BorderRadius.all(Radius.circular(4))),
+              ),
+              SizedBox(
+                width: 3,
+              ),
+              Container(
+                width: 15,
+                height: 15,
+                decoration: BoxDecoration(
+                    color: Color(0xFF0E3311).withOpacity(0),
+                    border: Border.all(color: Colors.blueAccent),
+                    borderRadius: BorderRadius.all(Radius.circular(4))),
+              ),
+              SizedBox(
+                width: 3,
+              ),
+              Container(
+                width: 15,
+                height: 15,
+                decoration: BoxDecoration(
+                    color: Color(0xFF0E3311).withOpacity(0),
+                    border: Border.all(color: Colors.blueAccent),
+                    borderRadius: BorderRadius.all(Radius.circular(4))),
+              ),
+              SizedBox(
+                width: 3,
+              ),
+            ],
+          );
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else {
@@ -34,7 +115,9 @@ class LastWeekHeatmap extends StatelessWidget {
               return Row(
                 children: [
                   LastWeekHeatmapItem(completion),
-                  SizedBox(width: 3,)
+                  SizedBox(
+                    width: 3,
+                  )
                 ],
               );
             }).toList(),

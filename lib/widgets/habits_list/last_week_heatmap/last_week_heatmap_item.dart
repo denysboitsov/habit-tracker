@@ -18,7 +18,7 @@ class LastWeekHeatmapItem extends StatelessWidget {
           width: 15,
           height: 15,
           decoration: BoxDecoration(
-              color: completion.isCompleted? Colors.blue : Colors.white,
+              color: completion.isCompleted? Colors.blue : Color(0xFF0E3311).withOpacity(0),
               border: Border.all(color: Colors.blueAccent),
               borderRadius: BorderRadius.all(Radius.circular(4))),
         );

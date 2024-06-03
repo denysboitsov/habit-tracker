@@ -1,4 +1,4 @@
-
+import 'package:flutter/material.dart';
 import 'package:habit_tracker/models/habit.dart';
 import 'package:habit_tracker/widgets/habits_list/habits_list.dart';
 import 'package:habit_tracker/widgets/new_habit/new_habit.dart';
@@ -144,14 +144,20 @@ class _HabitTrackerState extends State<HabitTracker> {
     // });
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text('Today'),
+        backgroundColor: Colors.transparent,
+        border: Border.all(width: 0.0, style: BorderStyle.none),
+        middle: Text(
+          'Today',
+          style: CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle,
+          
+        ),
         trailing: GestureDetector(
           onTap: () {
             _openAddHabitOverlay();
           },
           child: Icon(
             CupertinoIcons.add,
-            color: CupertinoColors.black,
+            color: CupertinoColors.white,
           ),
         ),
       ),

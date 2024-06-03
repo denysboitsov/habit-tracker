@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:habit_tracker/models/habit.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 final formatter = DateFormat.yMd();

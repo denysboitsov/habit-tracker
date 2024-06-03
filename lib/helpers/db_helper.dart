@@ -144,7 +144,7 @@ class DatabaseHelper {
         Completions c ON h.HabitID = c.HabitID
         AND c.CompletionDate = ds.date
       WHERE
-        h.HabitName = '${habit.name}'
+        h.HabitID = '${habit.id}'
       ORDER BY
         ds.date, h.HabitName;
     ''');
