@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:habit_tracker/helpers/db_helper.dart';
 import 'package:habit_tracker/models/habit.dart';
 import 'package:habit_tracker/widgets/edit_habit/edit_habit.dart';
@@ -163,6 +164,7 @@ class HabitsItem extends StatelessWidget {
               padding: const EdgeInsets.all(4.0),
               child: GestureDetector(
                 onTap: () {
+                  HapticFeedback.lightImpact();
                   onToggleHabit(habit);
                 },
                 child: Container(

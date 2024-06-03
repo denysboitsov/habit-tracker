@@ -22,7 +22,7 @@ void main() {
           ),
         ),
         primaryColor: CupertinoColors.systemBlue,
-        primaryContrastingColor: Color.fromARGB(255, 87, 87, 87),
+        primaryContrastingColor: Color.fromARGB(255, 44, 44, 44),
         scaffoldBackgroundColor: CupertinoColors.black,
       ),
       home: HabitTracker(),
