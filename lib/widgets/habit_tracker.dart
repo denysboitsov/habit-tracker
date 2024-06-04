@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:habit_tracker/models/habit.dart';
 import 'package:habit_tracker/widgets/habits_list/habits_list.dart';
 import 'package:habit_tracker/widgets/new_habit/new_habit.dart';
+import 'package:habit_tracker/widgets/statistics/statistics.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqlite_api.dart';
@@ -142,37 +144,133 @@ class _HabitTrackerState extends State<HabitTracker> {
     //   print("test");
     //   setState(() {});
     // });
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
+    return CupertinoTabScaffold(
+      tabBar: CupertinoTabBar(
         backgroundColor: Colors.transparent,
-        border: Border.all(width: 0.0, style: BorderStyle.none),
-        middle: Text(
-          'Today',
-          style: CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle,
-          
-        ),
-        trailing: GestureDetector(
-          onTap: () {
-            _openAddHabitOverlay();
-          },
-          child: Icon(
-            CupertinoIcons.add,
-            color: CupertinoColors.white,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.check_mark_circled_solid),
+            label: 'Today',
           ),
-        ),
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            child: HabitsList(
-              onToggleHabit: _toggleHabit,
-              onRemoveHabit: _removeHabit,
-              fetchHabits: DatabaseHelper().getHabits,
-              onUpdateHabit: _updateHabit,
-            ),
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.chart_bar),
+            label: 'Statistics',
           ),
         ],
       ),
+      tabBuilder: (context, index) {
+        switch (index) {
+          case 0:
+            return CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                backgroundColor: Colors.transparent,
+                border: Border.all(width: 0.0, style: BorderStyle.none),
+                middle: Text(
+                  'Today',
+                  style: CupertinoTheme.of(context)
+                      .textTheme
+                      .navLargeTitleTextStyle,
+                ),
+                trailing: GestureDetector(
+                  onTap: () {
+                    _openAddHabitOverlay();
+                  },
+                  child: Icon(
+                    CupertinoIcons.add,
+                    color: CupertinoColors.white,
+                  ),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: HabitsList(
+                      onToggleHabit: _toggleHabit,
+                      onRemoveHabit: _removeHabit,
+                      fetchHabits: DatabaseHelper().getHabits,
+                      onUpdateHabit: _updateHabit,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          case 1:
+            return CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                backgroundColor: Colors.transparent,
+                border: Border.all(width: 0.0, style: BorderStyle.none),
+                middle: Text(
+                  'Statistics',
+                  style: CupertinoTheme.of(context)
+                      .textTheme
+                      .navLargeTitleTextStyle,
+                ),
+              ),
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: ListView(
+                          // Create a grid with 2 columns. If you change the scrollDirection to
+                          // horizontal, this produces 2 rows.
+                          // Generate 100 widgets that display their index in the List.
+                            children: <Widget>[
+                              StatsPage(),
+                            ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Column(
+              //   children: [
+              //     Padding(
+              //       padding: EdgeInsets.all(4),
+              //       child: StatsPage(),
+              //     ),
+              //   ],
+              // ),
+            );
+
+          default:
+            return CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                backgroundColor: Colors.transparent,
+                border: Border.all(width: 0.0, style: BorderStyle.none),
+                middle: Text(
+                  'Today',
+                  style: CupertinoTheme.of(context)
+                      .textTheme
+                      .navLargeTitleTextStyle,
+                ),
+                trailing: GestureDetector(
+                  onTap: () {
+                    _openAddHabitOverlay();
+                  },
+                  child: Icon(
+                    CupertinoIcons.add,
+                    color: CupertinoColors.white,
+                  ),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: HabitsList(
+                      onToggleHabit: _toggleHabit,
+                      onRemoveHabit: _removeHabit,
+                      fetchHabits: DatabaseHelper().getHabits,
+                      onUpdateHabit: _updateHabit,
+                    ),
+                  ),
+                ],
+              ),
+            );
+        }
+      },
     );
   }
 }
