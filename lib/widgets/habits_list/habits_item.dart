@@ -28,8 +28,6 @@ class HabitsItem extends StatelessWidget {
         content: const Text('Are you sure you want to delete habit?'),
         actions: <CupertinoDialogAction>[
           CupertinoDialogAction(
-            /// This parameter indicates this action is the default,
-            /// and turns the action's text to bold text.
             isDefaultAction: true,
             onPressed: () {
               Navigator.pop(context);
@@ -37,9 +35,6 @@ class HabitsItem extends StatelessWidget {
             child: const Text('Cancel'),
           ),
           CupertinoDialogAction(
-            /// This parameter indicates the action would perform
-            /// a destructive action such as deletion, and turns
-            /// the action's text color to red.
             isDestructiveAction: true,
             onPressed: () {
               onRemoveHabit(habit);
@@ -50,38 +45,6 @@ class HabitsItem extends StatelessWidget {
         ],
       ),
     );
-    // return showDialog<void>(
-    //   context: context,
-    //   barrierDismissible: false, // User must tap button to dismiss dialog
-    //   builder: (BuildContext context) {
-    //     return AlertDialog(
-    //       title: Text('Confirm Delete'),
-    //       content: SingleChildScrollView(
-    //         child: ListBody(
-    //           children: <Widget>[
-    //             Text('Are you sure you want to delete?'),
-    //           ],
-    //         ),
-    //       ),
-    //       actions: <Widget>[
-    //         TextButton(
-    //           child: Text('Cancel'),
-    //           onPressed: () {
-    //             Navigator.of(context).pop();
-    //           },
-    //         ),
-    //         TextButton(
-    //           child: Text('Delete'),
-    //           onPressed: () {
-    //             onRemoveHabit(habit);
-    //             Navigator.of(context).pop();
-    //             // Add code to delete item
-    //           },
-    //         ),
-    //       ],
-    //     );
-    //   },
-    // );
   }
 
   void _onEditHabit(context, Habit habit) async {
@@ -130,10 +93,23 @@ class HabitsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    late int pressTime = 0;
+    final Stopwatch stopwatch = Stopwatch();
     return SizedBox(
       child: CupertinoContextMenu.builder(
           enableHapticFeedback: true,
           actions: <Widget>[
+            CupertinoContextMenuAction(
+              onPressed: () {
+                HapticFeedback.lightImpact();
+                onToggleHabit(habit);
+                Navigator.pop(context);
+              },
+              isDefaultAction: false,
+              isDestructiveAction: false,
+              trailingIcon: CupertinoIcons.check_mark_circled,
+              child: const Text('Toggle completion'),
+            ),
             CupertinoContextMenuAction(
               onPressed: () {
                 Navigator.pop(context);
@@ -162,63 +138,57 @@ class HabitsItem extends StatelessWidget {
           builder: (BuildContext context, Animation<double> animation) {
             return Padding(
               padding: const EdgeInsets.all(4.0),
-              child: GestureDetector(
-                onTap: () {
-                  HapticFeedback.lightImpact();
-                  onToggleHabit(habit);
-                },
-                child: Container(
-                  decoration: BoxDecoration(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: habit.isCompleted
+                      ? Color.fromARGB(255, 0, 39, 80)
+                      : CupertinoTheme.of(context).scaffoldBackgroundColor,
+                  borderRadius:
+                      BorderRadius.circular(15.0), // Customize the radius here
+                  border: Border.all(
                     color: habit.isCompleted
-                        ? Color.fromARGB(255, 0, 39, 80)
-                        : CupertinoTheme.of(context).scaffoldBackgroundColor,
-                    borderRadius: BorderRadius.circular(
-                        15.0), // Customize the radius here
-                    border: Border.all(
-                      color: habit.isCompleted
-                          ? CupertinoTheme.of(context)
-                              .primaryContrastingColor
-                              .withOpacity(0)
-                          : CupertinoTheme.of(context)
-                              .primaryContrastingColor, // Customize the color here
-                      width: 1.0, // Customize the border width if needed
-                    ),
+                        ? CupertinoTheme.of(context)
+                            .primaryContrastingColor
+                            .withOpacity(0)
+                        : CupertinoTheme.of(context)
+                            .primaryContrastingColor, // Customize the color here
+                    width: 1.0, // Customize the border width if needed
                   ),
-                  width: MediaQuery.of(context).size.width * 0.48,
-                  height: MediaQuery.of(context).size.width * 0.24,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 16,
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              habit.name,
-                              style: CupertinoTheme.of(context)
-                                  .textTheme
-                                  .navLargeTitleTextStyle
-                                  .copyWith(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          children: [
-                            LastWeekHeatmap(
-                              habit,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                ),
+                width: MediaQuery.of(context).size.width * 0.48,
+                height: MediaQuery.of(context).size.width * 0.24,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            habit.name,
+                            style: CupertinoTheme.of(context)
+                                .textTheme
+                                .navLargeTitleTextStyle
+                                .copyWith(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          LastWeekHeatmap(
+                            habit,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
