@@ -26,71 +26,7 @@ class _HabitTrackerState extends State<HabitTracker> {
       context: context,
       builder: (context) {
         return NewHabit(onAddHabit: _addHabit);
-        // return Container(
-        //   decoration: BoxDecoration(
-        //     color: CupertinoColors.systemBackground.resolveFrom(context),
-        //     borderRadius: BorderRadius.only(
-        //       topLeft: Radius.circular(20),
-        //       topRight: Radius.circular(20),
-        //     ),
-        //   ),
-        //   padding: EdgeInsets.only(
-        //     bottom: MediaQuery.of(context).viewInsets.bottom,
-        //   ),
-        //   child: Column(
-        //     mainAxisSize: MainAxisSize.min,
-        //     children: [
-        //       Row(
-        //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //         children: [
-        //           Container(
-        //             child: CupertinoButton(
-        //               child: Text('Cancel'),
-        //               onPressed: () {
-        //                 Navigator.pop(context);
-        //               },
-        //             ),
-        //           ),
-        //           Container(
-        //             child: Text(
-        //               "Add Habit",
-        //               style: CupertinoTheme.of(context)
-        //                   .textTheme
-        //                   .navTitleTextStyle,
-        //             ),
-        //           ),
-        //           Container(
-        //             child: CupertinoButton(
-        //               child: Text('Save'),
-        //               onPressed: () {
-        //                 Navigator.pop(context);
-        //               },
-        //             ),
-        //           ),
-        //         ],
-        //       ),
-        //       SafeArea(
-        //         child: Column(
-        //           children: [
-        //             Padding(
-        //               padding: const EdgeInsets.symmetric(horizontal: 20),
-        //               child: CupertinoTextField(
-        //                 placeholder: 'Enter habit name',
-        //                 padding: EdgeInsets.all(16.0),
-        //               ),
-        //             ),
-        //             SizedBox(height: 100.0),
-        //           ],
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // );
       },
-      //isScrollControlled: true,
-      // builder: (ctx) => NewHabit(
-      //   onAddHabit: _addHabit,
-      // ),
     );
   }
 
@@ -100,25 +36,6 @@ class _HabitTrackerState extends State<HabitTracker> {
       habit.isCompleted = !habit.isCompleted;
     });
     DatabaseHelper().toggleCompletion(habit.id, date, habit.isCompleted);
-    // ScaffoldMessenger.of(context).clearSnackBars();
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   SnackBar(
-    //     duration: const Duration(seconds: 5),
-    //     content: habit.isCompleted
-    //         ? Text("Habit checked.")
-    //         : Text("Habit unchecked."),
-    //     action: SnackBarAction(
-    //       label: 'Undo',
-    //       onPressed: () {
-    //         setState(() {
-    //           habit.isCompleted = !habit.isCompleted;
-    //         });
-    //         DatabaseHelper()
-    //             .toggleCompletion(habit.id, date, habit.isCompleted);
-    //       },
-    //     ),
-    //   ),
-    // );
   }
 
   Future<void> _addHabit(Habit habit) async {
@@ -140,13 +57,10 @@ class _HabitTrackerState extends State<HabitTracker> {
 
   @override
   Widget build(BuildContext context) {
-    // cron.schedule(Schedule.parse('* * * * *'), () async {
-    //   print("test");
-    //   setState(() {});
-    // });
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
         backgroundColor: Colors.transparent,
+        iconSize: 25,
         items: [
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.check_mark_circled_solid),
@@ -213,9 +127,6 @@ class _HabitTrackerState extends State<HabitTracker> {
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: ListView(
-                          // Create a grid with 2 columns. If you change the scrollDirection to
-                          // horizontal, this produces 2 rows.
-                          // Generate 100 widgets that display their index in the List.
                             children: <Widget>[
                               StatsPage(),
                             ],
@@ -225,14 +136,6 @@ class _HabitTrackerState extends State<HabitTracker> {
                   ],
                 ),
               ),
-              // Column(
-              //   children: [
-              //     Padding(
-              //       padding: EdgeInsets.all(4),
-              //       child: StatsPage(),
-              //     ),
-              //   ],
-              // ),
             );
 
           default:

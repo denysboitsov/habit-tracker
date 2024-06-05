@@ -17,7 +17,6 @@ class LastWeekHeatmap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Completion>>(
-      //future: fetchCompletions(),
       future: DatabaseHelper().getCompletions(
           habit,
           DateFormat('yyyy-MM-dd')
@@ -35,7 +34,7 @@ class LastWeekHeatmap extends StatelessWidget {
                     border: Border.all(color: CupertinoTheme.of(context).primaryColor),
                     borderRadius: BorderRadius.all(Radius.circular(4))),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 3,
               ),
               Container(
@@ -46,7 +45,7 @@ class LastWeekHeatmap extends StatelessWidget {
                     border: Border.all(color:CupertinoTheme.of(context).primaryColor),
                     borderRadius: BorderRadius.all(Radius.circular(4))),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 3,
               ),
               Container(
@@ -57,7 +56,7 @@ class LastWeekHeatmap extends StatelessWidget {
                     border: Border.all(color: Colors.blueAccent),
                     borderRadius: BorderRadius.all(Radius.circular(4))),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 3,
               ),
               Container(
@@ -68,7 +67,7 @@ class LastWeekHeatmap extends StatelessWidget {
                     border: Border.all(color: Colors.blueAccent),
                     borderRadius: BorderRadius.all(Radius.circular(4))),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 3,
               ),
               Container(
@@ -79,7 +78,7 @@ class LastWeekHeatmap extends StatelessWidget {
                     border: Border.all(color: Colors.blueAccent),
                     borderRadius: BorderRadius.all(Radius.circular(4))),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 3,
               ),
               Container(
@@ -90,7 +89,7 @@ class LastWeekHeatmap extends StatelessWidget {
                     border: Border.all(color: Colors.blueAccent),
                     borderRadius: BorderRadius.all(Radius.circular(4))),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 3,
               ),
               Container(
@@ -101,7 +100,7 @@ class LastWeekHeatmap extends StatelessWidget {
                     border: Border.all(color: Colors.blueAccent),
                     borderRadius: BorderRadius.all(Radius.circular(4))),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 3,
               ),
             ],
@@ -115,7 +114,7 @@ class LastWeekHeatmap extends StatelessWidget {
               return Row(
                 children: [
                   LastWeekHeatmapItem(completion),
-                  SizedBox(
+                  const SizedBox(
                     width: 3,
                   )
                 ],

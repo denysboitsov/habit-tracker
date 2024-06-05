@@ -25,7 +25,7 @@ class _EditHabitState extends State<EditHabit> {
     return Container(
       decoration: BoxDecoration(
         color: CupertinoColors.systemBackground.resolveFrom(context),
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
         ),
