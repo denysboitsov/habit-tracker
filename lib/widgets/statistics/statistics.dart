@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 
 class StatsPage extends StatelessWidget {
@@ -29,25 +31,36 @@ class StatsPage extends StatelessWidget {
     var completionData = generateDummyCompletionData();
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: HeatMap(
-        datasets: completionData,
-        colorMode: ColorMode.color,
-        showColorTip: false,
-        scrollable: true,
-        colorsets: {
-          1: Colors.red[100]!,
-          2: Colors.red[200]!,
-          3: Colors.red[300]!,
-          4: Colors.red[400]!,
-          5: Colors.red[500]!,
-          6: Colors.red[600]!,
-          7: Colors.red[700]!,
-          8: Colors.red[800]!,
-          9: Colors.red[900]!,
-        },
-        onClick: (value) {
-          print("Clicked date: $value");
-        },
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Year Overview",
+              style: CupertinoTheme.of(context)
+                  .textTheme
+                  .navLargeTitleTextStyle
+                  .copyWith(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+          ),
+          SizedBox(height: 14,),
+          HeatMap(
+            defaultColor: Color.fromARGB(255, 0, 39, 80),
+            datasets: completionData,
+            colorMode: ColorMode.opacity,
+            showColorTip: false,
+            scrollable: true,
+            colorsets: {
+              1: CupertinoTheme.of(context).primaryColor,
+            },
+            onClick: (value) {
+              print("Clicked date: $value");
+            },
+          ),
+        ],
       ),
     );
   }
