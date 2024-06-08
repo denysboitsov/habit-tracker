@@ -11,41 +11,13 @@ class HabitsList extends StatelessWidget {
   final void Function(Habit habit) onRemoveHabit;
   final Future<List<Habit>> Function() fetchHabits;
 
-  void _onEditHabit(context, Habit habit) {
-    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
-    final result = showMenu(
-        context: context,
-        position: RelativeRect.fromRect(
-          Rect.fromPoints(
-            Offset(0, 0), // Offset from the top-left corner
-            Offset(overlay.size.width, overlay.size.height),
-          ),
-          Offset.zero & overlay.size,),
-        items: [
-          const PopupMenuItem<String>(
-                  value: 'edit',
-                  child: ListTile(
-                    leading: Icon(Icons.edit),
-                    title: Text('Edit'),
-                  ),
-                ),
-          const PopupMenuItem<String>(
-                  value: 'delete',
-                  child: ListTile(
-                    leading: Icon(Icons.delete),
-                    title: Text('Delete'),
-                  ),
-                ),
-        ]);
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Habit>>(
       future: fetchHabits(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else {
@@ -59,11 +31,8 @@ class HabitsList extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(4.0),
             child: GridView.count(
-              // Create a grid with 2 columns. If you change the scrollDirection to
-              // horizontal, this produces 2 rows.
               crossAxisCount: 2,
               childAspectRatio: (10 / 5),
-              // Generate 100 widgets that display their index in the List.
               children: [
                 ...habits.map((habit) => HabitsItem(habit, onToggleHabit: onToggleHabit, onRemoveHabit: onRemoveHabit, onUpdateHabit: onUpdateHabit,)),
               ],
