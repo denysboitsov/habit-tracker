@@ -18,6 +18,36 @@ class NewHabit extends StatefulWidget {
 class _NewHabitState extends State<NewHabit> {
   final _nameController = TextEditingController();
 
+  void _showDatePicker() {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => Container(
+        height: 216,
+        padding: const EdgeInsets.only(top: 6.0),
+        // The Bottom margin is provided to align the popup above the system
+        // navigation bar.
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        // Provide a background color for the popup.
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        // Use a SafeArea widget to avoid system overlaps.
+        child: SafeArea(
+          top: false,
+          child: CupertinoDatePicker(
+            initialDateTime: DateTime.now(),
+            mode: CupertinoDatePickerMode.date,
+            use24hFormat: true,
+            // This shows day of week alongside day of month
+            showDayOfWeek: true,
+            // This is called when the user changes the date.
+            onDateTimeChanged: (DateTime newDate) {},
+          ),
+        ),
+      ),
+    );
+  }
+
   void _submitNewHabit() {
     if (_nameController.text.trim().isEmpty) {
       showCupertinoDialog(
@@ -65,6 +95,7 @@ class _NewHabitState extends State<NewHabit> {
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
@@ -94,19 +125,92 @@ class _NewHabitState extends State<NewHabit> {
               ),
             ],
           ),
-          SafeArea(
+          Padding(
+            padding: const EdgeInsets.all(20),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: CupertinoTextField(
-                    maxLength: 50,
-                    controller: _nameController,
-                    placeholder: 'Name',
-                    padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Name",
+                      style: CupertinoTheme.of(context)
+                          .textTheme
+                          .navTitleTextStyle
+                          .copyWith(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
                   ),
                 ),
-                SizedBox(height: 100.0),
+                CupertinoTextField(
+                  maxLength: 50,
+                  controller: _nameController,
+                  padding: EdgeInsets.all(16.0),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.width * 0.05,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Text(
+                            "Start Date",
+                            style: CupertinoTheme.of(context)
+                                .textTheme
+                                .navTitleTextStyle
+                                .copyWith(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          height: MediaQuery.of(context).size.width * 0.1,
+                          child: CupertinoButton.filled(
+                              padding: EdgeInsets.all(0),
+                              child: Text("Today"),
+                              onPressed: _showDatePicker),
+                        ),
+                      ],
+                    ),
+                    Spacer(),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Text(
+                            "End Date",
+                            style: CupertinoTheme.of(context)
+                                .textTheme
+                                .navTitleTextStyle
+                                .copyWith(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          height: MediaQuery.of(context).size.width * 0.1,
+                          child: CupertinoButton.filled(
+                              padding: EdgeInsets.all(0),
+                              child: Text("No End Date"),
+                              onPressed: _showDatePicker),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(height: 100),
               ],
             ),
           ),
