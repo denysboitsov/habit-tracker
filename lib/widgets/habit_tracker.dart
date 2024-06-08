@@ -40,7 +40,7 @@ class _HabitTrackerState extends State<HabitTracker> {
 
   Future<void> _addHabit(Habit habit) async {
     setState(() {
-      DatabaseHelper().addHabit(habit.id, habit.name);
+      DatabaseHelper().addHabit(habit.id, habit.name, habit.startDate, habit.endDate);
     });
   }
 

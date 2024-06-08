@@ -20,7 +20,9 @@ class DatabaseHelper {
 
   Future<Database> _initDatabase() async {
     final documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDirectory.path, 'your_database.db');
+    //final path = join(documentsDirectory.path, 'your_database.db');
+    final path = "/Users/denysartiukhov/Desktop/flutter_projects/habit_tracker_2/db.db";
+    print(path);
     //String path = "/Users/denysartiukhov/Desktop/flutter_projects/habit-tracker/habits.db";
     return await openDatabase(
       path,
@@ -29,7 +31,9 @@ class DatabaseHelper {
           CREATE TABLE Habits (
             HabitID TEXT PRIMARY KEY, 
             HabitName TEXT NOT NULL, 
-            CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            StartDate DATE NOT NULL,
+            EndDate DATE NOT NULL
           );
         ''');
         db.execute('''
@@ -67,12 +71,14 @@ class DatabaseHelper {
       });
     }
   }
-  Future<void> addHabit(String habitId, String habitName) async {
+  Future<void> addHabit(String habitId, String habitName, DateTime startDate, DateTime? endDate) async {
     print("Adding new habit in DB");
     final db = await database;
     await db.insert('Habits', {
       'HabitID': habitId,
       'HabitName': habitName,
+      'StartDate': startDate.toIso8601String(),
+      'EndDate': endDate?.toIso8601String(),
     });
   }
 
@@ -98,9 +104,11 @@ class DatabaseHelper {
     var habits = await db.rawQuery('''
       SELECT 
         h.HabitID, 
-        h.HabitName, 
+        h.HabitName,
+        h.StartDate,
+        h.EndDate,
         c.CompletionDate, 
-        c.Status  
+        c.Status
       FROM 
         Habits h 
       LEFT JOIN 
@@ -112,6 +120,8 @@ class DatabaseHelper {
         id: habits[i]['HabitID'].toString(),
         name: habits[i]['HabitName'].toString(),
         isCompleted: habits[i]['Status'].toString() == "1" ? true : false,
+        startDate: DateTime.parse(habits[i]['StartDate'].toString()),
+        endDate: DateTime.parse(habits[i]['EndDate'].toString()),
         // Same for the other properties
       );
     });

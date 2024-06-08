@@ -17,8 +17,12 @@ class NewHabit extends StatefulWidget {
 
 class _NewHabitState extends State<NewHabit> {
   final _nameController = TextEditingController();
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now();
+  String startDateButtonText = "Today";
+  String endDateButtonText = "No End Date";
 
-  void _showDatePicker() {
+  void _showDatePicker(Widget child) {
     showCupertinoModalPopup<void>(
       context: context,
       builder: (BuildContext context) => Container(
@@ -34,15 +38,7 @@ class _NewHabitState extends State<NewHabit> {
         // Use a SafeArea widget to avoid system overlaps.
         child: SafeArea(
           top: false,
-          child: CupertinoDatePicker(
-            initialDateTime: DateTime.now(),
-            mode: CupertinoDatePickerMode.date,
-            use24hFormat: true,
-            // This shows day of week alongside day of month
-            showDayOfWeek: true,
-            // This is called when the user changes the date.
-            onDateTimeChanged: (DateTime newDate) {},
-          ),
+          child: child,
         ),
       ),
     );
@@ -68,9 +64,30 @@ class _NewHabitState extends State<NewHabit> {
       );
       return;
     }
+    if (!endDate.isAfter(startDate)) {
+      showCupertinoDialog(
+        context: context,
+        builder: (BuildContext ctx) => CupertinoAlertDialog(
+          title: const Text('Invalid input'),
+          content: const Text('Please make sure start date is before end date.'),
+          actions: <CupertinoDialogAction>[
+            CupertinoDialogAction(
+              isDestructiveAction: false,
+              onPressed: () {
+                Navigator.pop(ctx);
+              },
+              child: const Text('Okay'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
     widget.onAddHabit(Habit(
       name: _nameController.text,
       isCompleted: false,
+      startDate: startDate,
+      endDate: endDate,
     ));
     Navigator.pop(context);
   }
@@ -177,8 +194,24 @@ class _NewHabitState extends State<NewHabit> {
                           height: MediaQuery.of(context).size.width * 0.1,
                           child: CupertinoButton.filled(
                               padding: EdgeInsets.all(0),
-                              child: Text("Today"),
-                              onPressed: _showDatePicker),
+                              child: Text(startDateButtonText),
+                              onPressed: () {
+                                _showDatePicker(
+                                  CupertinoDatePicker(
+                                    minimumDate: DateTime.now(),
+                                    initialDateTime: DateTime.now(),
+                                    mode: CupertinoDatePickerMode.date,
+                                    use24hFormat: true,
+                                    // This shows day of week alongside day of month
+                                    showDayOfWeek: true,
+                                    // This is called when the user changes the date.
+                                    onDateTimeChanged: (DateTime newDate) {
+                                      startDateButtonText = DateFormat('yyyy-MM-dd').format(newDate).toString();
+                                      setState(() => startDate = newDate);
+                                    },
+                                  ),
+                                );
+                              }),
                         ),
                       ],
                     ),
@@ -203,8 +236,23 @@ class _NewHabitState extends State<NewHabit> {
                           height: MediaQuery.of(context).size.width * 0.1,
                           child: CupertinoButton.filled(
                               padding: EdgeInsets.all(0),
-                              child: Text("No End Date"),
-                              onPressed: _showDatePicker),
+                              child: Text(endDateButtonText),
+                              onPressed: () {
+                                _showDatePicker(
+                                  CupertinoDatePicker(
+                                    initialDateTime: DateTime.now(),
+                                    mode: CupertinoDatePickerMode.date,
+                                    use24hFormat: true,
+                                    // This shows day of week alongside day of month
+                                    showDayOfWeek: true,
+                                    // This is called when the user changes the date.
+                                    onDateTimeChanged: (DateTime newDate) {
+                                      endDateButtonText = DateFormat('yyyy-MM-dd').format(newDate).toString();
+                                      setState(() => endDate = newDate);
+                                    },
+                                  ),
+                                );
+                              }),
                         ),
                       ],
                     ),

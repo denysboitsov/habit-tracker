@@ -5,7 +5,8 @@ import 'package:intl/intl.dart';
 final formatter = DateFormat.yMd();
 
 class EditHabit extends StatefulWidget {
-  const EditHabit({super.key, required this.habit, required this.onUpdateHabit});
+  const EditHabit(
+      {super.key, required this.habit, required this.onUpdateHabit});
 
   final void Function(Habit habit) onUpdateHabit;
   final Habit habit;
@@ -49,7 +50,7 @@ class _EditHabitState extends State<EditHabit> {
               ),
               Container(
                 child: Text(
-                  "Add Habit",
+                  "Edit Habit",
                   style: CupertinoTheme.of(context).textTheme.navTitleTextStyle,
                 ),
               ),
@@ -58,31 +59,35 @@ class _EditHabitState extends State<EditHabit> {
                   child: Text('Save'),
                   onPressed: () {
                     Navigator.pop(context);
-                    widget.onUpdateHabit(Habit(id: widget.habit.id, name: _nameController.text, isCompleted: widget.habit.isCompleted));
+                    widget.onUpdateHabit(Habit(
+                      id: widget.habit.id,
+                      name: _nameController.text,
+                      isCompleted: widget.habit.isCompleted,
+                      startDate: widget.habit.startDate,
+                      endDate: widget.habit.endDate,
+                    ));
                   },
                 ),
               ),
             ],
           ),
-          SafeArea(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: CupertinoTextField(
-                    maxLength: 50,
-                    controller: _nameController,
-                    placeholder: 'Name',
-                    padding: EdgeInsets.all(16.0),
-                  ),
+          Column(
+            children: [
+              SizedBox(height: 25.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: CupertinoTextField(
+                  maxLength: 50,
+                  controller: _nameController,
+                  placeholder: 'Name',
+                  padding: EdgeInsets.all(16.0),
                 ),
-                SizedBox(height: 100.0),
-              ],
-            ),
+              ),
+              SizedBox(height: 50.0),
+            ],
           ),
         ],
       ),
     );
-    
   }
 }
