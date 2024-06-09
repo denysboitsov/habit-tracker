@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:habit_tracker/models/habit.dart';
@@ -20,10 +21,10 @@ class DatabaseHelper {
 
   Future<Database> _initDatabase() async {
     final documentsDirectory = await getApplicationDocumentsDirectory();
-    //final path = join(documentsDirectory.path, 'your_database.db');
-    final path = "/Users/denysartiukhov/Desktop/flutter_projects/habit_tracker_2/db.db";
-    print(path);
-    //String path = "/Users/denysartiukhov/Desktop/flutter_projects/habit-tracker/habits.db";
+    final path = join(documentsDirectory.path, 'your_database.db');
+    //final path =
+    //     "/Users/denysartiukhov/Desktop/flutter_projects/habit_tracker_2/db.db";
+    // String path = "/Users/denysartiukhov/Desktop/flutter_projects/habit-tracker/habits.db";
     return await openDatabase(
       path,
       onCreate: (db, version) {
@@ -33,7 +34,7 @@ class DatabaseHelper {
             HabitName TEXT NOT NULL, 
             CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             StartDate DATE NOT NULL,
-            EndDate DATE NOT NULL
+            EndDate DATE
           );
         ''');
         db.execute('''
@@ -51,8 +52,8 @@ class DatabaseHelper {
     );
   }
 
-  Future<void> toggleCompletion(String habitId, String date, bool status) async {
-    print("Toggling complition in DB");
+  Future<void> toggleCompletion(
+      String habitId, String date, bool status) async {
     final db = await database;
     int count = await db.rawUpdate(
       '''
@@ -71,8 +72,9 @@ class DatabaseHelper {
       });
     }
   }
-  Future<void> addHabit(String habitId, String habitName, DateTime startDate, DateTime? endDate) async {
-    print("Adding new habit in DB");
+
+  Future<void> addHabit(String habitId, String habitName, DateTime startDate,
+      DateTime? endDate) async {
     final db = await database;
     await db.insert('Habits', {
       'HabitID': habitId,
@@ -83,9 +85,9 @@ class DatabaseHelper {
   }
 
   Future<void> updateHabit(String habitId, String habitName) async {
-    print("Adding new habit in DB");
     final db = await database;
-    await db.rawQuery('UPDATE Habits SET HabitName = "$habitName" WHERE HabitID = "$habitId";');
+    await db.rawQuery(
+        'UPDATE Habits SET HabitName = "$habitName" WHERE HabitID = "$habitId";');
   }
 
   Future<void> removeHabit(String habitId) async {
@@ -121,7 +123,9 @@ class DatabaseHelper {
         name: habits[i]['HabitName'].toString(),
         isCompleted: habits[i]['Status'].toString() == "1" ? true : false,
         startDate: DateTime.parse(habits[i]['StartDate'].toString()),
-        endDate: DateTime.parse(habits[i]['EndDate'].toString()),
+        endDate: habits[i]['EndDate'].toString() == "null"
+            ? null
+            : DateTime.parse(habits[i]['EndDate'].toString()),
         // Same for the other properties
       );
     });
@@ -168,6 +172,20 @@ class DatabaseHelper {
         // Same for the other properties
       );
     });
+    return completionsList;
+  }
+
+  Future<List<Completion>> getAllCompletions() async {
+    List<Habit> habits = await getHabits();
+    List<Completion> completionsList = [];
+
+    for (Habit habit in habits) {
+      DateTime endDate =
+          habit.endDate == null ? DateTime.now() : habit.endDate!;
+      completionsList
+          .addAll(await getCompletions(habit, habit.startDate, endDate));
+    }
+
     return completionsList;
   }
 }

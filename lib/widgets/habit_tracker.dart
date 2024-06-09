@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:habit_tracker/models/habit.dart';
 import 'package:habit_tracker/widgets/habits_list/habits_list.dart';
 import 'package:habit_tracker/widgets/new_habit/new_habit.dart';
 import 'package:habit_tracker/widgets/statistics/statistics.dart';
 import 'package:intl/intl.dart';
-import 'package:sqflite/sqflite.dart' as sql;
-import 'package:sqflite/sqlite_api.dart';
-import 'package:path/path.dart' as path;
 import 'package:habit_tracker/helpers/db_helper.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -61,7 +57,7 @@ class _HabitTrackerState extends State<HabitTracker> {
       tabBar: CupertinoTabBar(
         backgroundColor: Colors.transparent,
         iconSize: 25,
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.check_mark_circled_solid),
             label: 'Today',
@@ -89,7 +85,7 @@ class _HabitTrackerState extends State<HabitTracker> {
                   onTap: () {
                     _openAddHabitOverlay();
                   },
-                  child: Icon(
+                  child: const Icon(
                     CupertinoIcons.add,
                     color: CupertinoColors.white,
                   ),
@@ -127,7 +123,7 @@ class _HabitTrackerState extends State<HabitTracker> {
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: ListView(
-                            children: <Widget>[
+                            children: const <Widget>[
                               StatsPage(),
                             ],
                         ),
@@ -153,7 +149,7 @@ class _HabitTrackerState extends State<HabitTracker> {
                   onTap: () {
                     _openAddHabitOverlay();
                   },
-                  child: Icon(
+                  child: const Icon(
                     CupertinoIcons.add,
                     color: CupertinoColors.white,
                   ),

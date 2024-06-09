@@ -1,65 +1,94 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
+import 'package:habit_tracker/helpers/db_helper.dart';
 
 class StatsPage extends StatelessWidget {
-  StatsPage({super.key});
+  const StatsPage({super.key});
 
-  Map<DateTime, int> generateDummyCompletionData() {
+  Future<Map<DateTime, int>> generateCompletionData() async {
     final Map<DateTime, int> data = {};
-    final random = Random();
+
+    var completions = await DatabaseHelper().getAllCompletions();
 
     // Define the date range
-    DateTime startDate = DateTime(2023, 1, 1);
-    DateTime endDate = DateTime(2023, 12, 31);
+    DateTime startDate = DateTime.parse('2024-01-01');
+    DateTime endDate = DateTime.parse('2024-12-31');
 
     // Generate random completion counts for each day in the range
     for (int i = 0; i <= endDate.difference(startDate).inDays; i++) {
       DateTime currentDate = startDate.add(Duration(days: i));
-      data[currentDate] =
-          random.nextInt(10); // Random completions between 0 and 9
+      currentDate =
+          DateTime(currentDate.year, currentDate.month, currentDate.day);
+      //data[currentDate] = 0;
+      var completedHabits = completions
+          .where((completion) =>
+              completion.isCompleted &&
+              completion.completionDate == currentDate)
+          .toList();
+      var allHabits = completions
+          .where((completion) => completion.completionDate == currentDate)
+          .toList();
+      var completionsPercent = allHabits.isEmpty
+          ? 0
+          : completedHabits.length / allHabits.length * 100;
+      data[DateTime(currentDate.year, currentDate.month, currentDate.day)] =
+          completionsPercent.toInt(); // Random completions between 0 and 9
     }
-
     return data;
   }
 
   @override
   Widget build(BuildContext context) {
-    var completionData = generateDummyCompletionData();
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              "Year Overview",
-              style: CupertinoTheme.of(context)
-                  .textTheme
-                  .navLargeTitleTextStyle
-                  .copyWith(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+    return FutureBuilder<Map<DateTime, int>>(
+      future: generateCompletionData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Row();
+          //return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Row();
+          //return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          final completionData = snapshot.data;
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Year Overview",
+                    style: CupertinoTheme.of(context)
+                        .textTheme
+                        .navLargeTitleTextStyle
+                        .copyWith(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
+                ),
+                const SizedBox(
+                  height: 14,
+                ),
+                HeatMap(
+                  defaultColor: CupertinoTheme.of(context).primaryContrastingColor,
+                  datasets: completionData,
+                  colorMode: ColorMode.color,
+                  showColorTip: false,
+                  scrollable: true,
+                  colorsets: {
+                    0: CupertinoTheme.of(context).primaryContrastingColor,
+                    100: CupertinoTheme.of(context).primaryColor,
+                  },
+                  onClick: (value) {
+                  },
+                ),
+              ],
             ),
-          ),
-          SizedBox(height: 14,),
-          HeatMap(
-            defaultColor: Color.fromARGB(255, 0, 39, 80),
-            datasets: completionData,
-            colorMode: ColorMode.opacity,
-            showColorTip: false,
-            scrollable: true,
-            colorsets: {
-              1: CupertinoTheme.of(context).primaryColor,
-            },
-            onClick: (value) {
-              print("Clicked date: $value");
-            },
-          ),
-        ],
-      ),
+          );
+        }
+      },
     );
   }
 }

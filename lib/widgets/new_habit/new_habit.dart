@@ -18,7 +18,7 @@ class NewHabit extends StatefulWidget {
 class _NewHabitState extends State<NewHabit> {
   final _nameController = TextEditingController();
   DateTime startDate = DateTime.now();
-  DateTime endDate = DateTime.now();
+  DateTime? endDate;
   String startDateButtonText = "Today";
   String endDateButtonText = "No End Date";
 
@@ -64,7 +64,7 @@ class _NewHabitState extends State<NewHabit> {
       );
       return;
     }
-    if (!endDate.isAfter(startDate)) {
+    if (endDate != null && !endDate!.isAfter(startDate)) {
       showCupertinoDialog(
         context: context,
         builder: (BuildContext ctx) => CupertinoAlertDialog(
@@ -103,7 +103,7 @@ class _NewHabitState extends State<NewHabit> {
     return Container(
       decoration: BoxDecoration(
         color: CupertinoColors.systemBackground.resolveFrom(context),
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
         ),
@@ -118,27 +118,21 @@ class _NewHabitState extends State<NewHabit> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                child: CupertinoButton(
-                  child: Text('Cancel'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
+              CupertinoButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
-              Container(
-                child: Text(
-                  "Add Habit",
-                  style: CupertinoTheme.of(context).textTheme.navTitleTextStyle,
-                ),
+              Text(
+                "Add Habit",
+                style: CupertinoTheme.of(context).textTheme.navTitleTextStyle,
               ),
-              Container(
-                child: CupertinoButton(
-                  child: Text('Save'),
-                  onPressed: () {
-                    _submitNewHabit();
-                  },
-                ),
+              CupertinoButton(
+                child: const Text('Save'),
+                onPressed: () {
+                  _submitNewHabit();
+                },
               ),
             ],
           ),
@@ -166,7 +160,7 @@ class _NewHabitState extends State<NewHabit> {
                 CupertinoTextField(
                   maxLength: 50,
                   controller: _nameController,
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0),
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.width * 0.05,
@@ -193,7 +187,7 @@ class _NewHabitState extends State<NewHabit> {
                           width: MediaQuery.of(context).size.width * 0.4,
                           height: MediaQuery.of(context).size.width * 0.1,
                           child: CupertinoButton.filled(
-                              padding: EdgeInsets.all(0),
+                              padding: const EdgeInsets.all(0),
                               child: Text(startDateButtonText),
                               onPressed: () {
                                 _showDatePicker(
@@ -215,7 +209,7 @@ class _NewHabitState extends State<NewHabit> {
                         ),
                       ],
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Column(
                       children: [
                         Padding(
@@ -235,7 +229,7 @@ class _NewHabitState extends State<NewHabit> {
                           width: MediaQuery.of(context).size.width * 0.4,
                           height: MediaQuery.of(context).size.width * 0.1,
                           child: CupertinoButton.filled(
-                              padding: EdgeInsets.all(0),
+                              padding: const EdgeInsets.all(0),
                               child: Text(endDateButtonText),
                               onPressed: () {
                                 _showDatePicker(
@@ -258,7 +252,7 @@ class _NewHabitState extends State<NewHabit> {
                     ),
                   ],
                 ),
-                SizedBox(height: 100),
+                const SizedBox(height: 100),
               ],
             ),
           ),
