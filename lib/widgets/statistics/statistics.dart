@@ -39,7 +39,6 @@ class StatsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("lAAAl");
     return FutureBuilder<Map<DateTime, int>>(
       future: generateCompletionData(),
       builder: (context, snapshot) {

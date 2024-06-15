@@ -9,24 +9,6 @@ void main() {
       theme: ThemeData(
         brightness: Brightness.dark,
       ),
-      // theme: ThemeData(
-      //   brightness: Brightness.dark,
-      //   textTheme: CupertinoTextThemeData(
-      //     textStyle: TextStyle(
-      //       color: CupertinoColors.white,
-      //     ),
-      //     navTitleTextStyle: TextStyle(
-      //       color: CupertinoColors.white,
-      //     ),
-      //     navLargeTitleTextStyle: TextStyle(
-      //       color: CupertinoColors.white,
-      //       fontSize: 20,
-      //     ),
-      //   ),
-      //   primaryColor: CupertinoColors.systemBlue,
-      //   primaryContrastingColor: Color.fromARGB(255, 44, 44, 44),
-      //   scaffoldBackgroundColor: CupertinoColors.black,
-      // ),
       home: HabitTracker(),
     ),
   );

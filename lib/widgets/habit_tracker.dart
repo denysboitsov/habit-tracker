@@ -16,7 +16,6 @@ class HabitTracker extends StatefulWidget {
 }
 
 class _HabitTrackerState extends State<HabitTracker> {
-
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -24,6 +23,7 @@ class _HabitTrackerState extends State<HabitTracker> {
       _selectedIndex = index;
     });
   }
+
   void _openAddHabitOverlay() {
     showModalBottomSheet(
       context: context,
@@ -43,7 +43,8 @@ class _HabitTrackerState extends State<HabitTracker> {
 
   Future<void> _addHabit(Habit habit) async {
     setState(() {
-      DatabaseHelper().addHabit(habit.id, habit.name, habit.startDate, habit.endDate);
+      DatabaseHelper()
+          .addHabit(habit.id, habit.name, habit.startDate, habit.endDate);
     });
   }
 
@@ -62,11 +63,11 @@ class _HabitTrackerState extends State<HabitTracker> {
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
       HabitsList(
-                        onToggleHabit: _toggleHabit,
-                        onRemoveHabit: _removeHabit,
-                        fetchHabits: DatabaseHelper().getHabits,
-                        onUpdateHabit: _updateHabit,
-                      ),
+        onToggleHabit: _toggleHabit,
+        onRemoveHabit: _removeHabit,
+        fetchHabits: DatabaseHelper().getHabits,
+        onUpdateHabit: _updateHabit,
+      ),
       StatsPage(),
     ];
 
@@ -80,7 +81,6 @@ class _HabitTrackerState extends State<HabitTracker> {
           ),
         ],
       ),
-      //body: Row(),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -92,135 +92,11 @@ class _HabitTrackerState extends State<HabitTracker> {
             icon: Icon(Icons.bar_chart),
             label: 'Stats',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.person),
-          //   label: 'Profile',
-          // ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.blue,
         onTap: _onItemTapped,
       ),
     );
-    // return CupertinoTabScaffold(
-    //   tabBar: CupertinoTabBar(
-    //     backgroundColor: Colors.transparent,
-    //     iconSize: 25,
-    //     items: const [
-    //       BottomNavigationBarItem(
-    //         icon: Icon(CupertinoIcons.check_mark_circled_solid),
-    //         label: 'Today',
-    //       ),
-    //       BottomNavigationBarItem(
-    //         icon: Icon(CupertinoIcons.chart_bar),
-    //         label: 'Statistics',
-    //       ),
-    //     ],
-    //   ),
-    //   tabBuilder: (context, index) {
-    //     switch (index) {
-    //       case 0:
-    //         print("lil");
-    //         return CupertinoPageScaffold(
-    //           navigationBar: CupertinoNavigationBar(
-    //             backgroundColor: Colors.transparent,
-    //             border: Border.all(width: 0.0, style: BorderStyle.none),
-    //             middle: Text(
-    //               'Today',
-    //               style: CupertinoTheme.of(context)
-    //                   .textTheme
-    //                   .navLargeTitleTextStyle,
-    //             ),
-    //             trailing: GestureDetector(
-    //               onTap: () {
-    //                 _openAddHabitOverlay();
-    //               },
-    //               child: const Icon(
-    //                 CupertinoIcons.add,
-    //                 color: CupertinoColors.white,
-    //               ),
-    //             ),
-    //           ),
-    //           child: Column(
-    //             children: [
-    //               Expanded(
-    //                 child: HabitsList(
-    //                   onToggleHabit: _toggleHabit,
-    //                   onRemoveHabit: _removeHabit,
-    //                   fetchHabits: DatabaseHelper().getHabits,
-    //                   onUpdateHabit: _updateHabit,
-    //                 ),
-    //               ),
-    //             ],
-    //           ),
-    //         );
-    //       case 1:
-    //         print("lol");
-    //         return CupertinoPageScaffold(
-    //           navigationBar: CupertinoNavigationBar(
-    //             backgroundColor: Colors.transparent,
-    //             border: Border.all(width: 0.0, style: BorderStyle.none),
-    //             middle: Text(
-    //               'Statistics',
-    //               style: CupertinoTheme.of(context)
-    //                   .textTheme
-    //                   .navLargeTitleTextStyle,
-    //             ),
-    //           ),
-    //           child: SafeArea(
-    //             child: Column(
-    //               children: [
-    //                 Expanded(
-    //                   child: Padding(
-    //                     padding: const EdgeInsets.all(4.0),
-    //                     child: ListView(
-    //                         children: const <Widget>[
-    //                           StatsPage(),
-    //                         ],
-    //                     ),
-    //                   ),
-    //                 ),
-    //               ],
-    //             ),
-    //           ),
-    //         );
-
-    //       default:
-    //         return CupertinoPageScaffold(
-    //           navigationBar: CupertinoNavigationBar(
-    //             backgroundColor: Colors.transparent,
-    //             border: Border.all(width: 0.0, style: BorderStyle.none),
-    //             middle: Text(
-    //               'Today',
-    //               style: CupertinoTheme.of(context)
-    //                   .textTheme
-    //                   .navLargeTitleTextStyle,
-    //             ),
-    //             trailing: GestureDetector(
-    //               onTap: () {
-    //                 _openAddHabitOverlay();
-    //               },
-    //               child: const Icon(
-    //                 CupertinoIcons.add,
-    //                 color: CupertinoColors.white,
-    //               ),
-    //             ),
-    //           ),
-    //           child: Column(
-    //             children: [
-    //               Expanded(
-    //                 child: HabitsList(
-    //                   onToggleHabit: _toggleHabit,
-    //                   onRemoveHabit: _removeHabit,
-    //                   fetchHabits: DatabaseHelper().getHabits,
-    //                   onUpdateHabit: _updateHabit,
-    //                 ),
-    //               ),
-    //             ],
-    //           ),
-    //         );
-    //     }
-    //   },
-    // );
   }
 }

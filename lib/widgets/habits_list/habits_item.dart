@@ -85,36 +85,6 @@ class HabitsItem extends StatelessWidget {
             });
       }
     });
-    // showCupertinoModalPopup<void>(
-    //   context: context,
-    //   builder: (BuildContext context) => CupertinoActionSheet(
-    //     title: const Text('Options'),
-    //     // message: const Text('Message'),
-    //     actions: <CupertinoActionSheetAction>[
-    //       CupertinoActionSheetAction(
-    //         onPressed: () {
-    //           Navigator.pop(context);
-    //           showCupertinoModalPopup(
-    //               barrierColor: Colors.transparent,
-    //               context: context,
-    //               builder: (context) {
-    //                 return EditHabit(
-    //                     habit: habit, onUpdateHabit: onUpdateHabit);
-    //               });
-    //         },
-    //         child: const Text('Edit'),
-    //       ),
-    //       CupertinoActionSheetAction(
-    //         isDestructiveAction: true,
-    //         onPressed: () {
-    //           Navigator.pop(context);
-    //           _showDeleteConfirmationDialog(context);
-    //         },
-    //         child: const Text('Delete'),
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
 
   @override
