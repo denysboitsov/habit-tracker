@@ -92,10 +92,10 @@ class _HabitTrackerState extends State<HabitTracker> {
             icon: Icon(Icons.bar_chart),
             label: 'Stats',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.person),
+          //   label: 'Profile',
+          // ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.blue,

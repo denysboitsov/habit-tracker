@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:habit_tracker/models/habit.dart';
 import 'package:intl/intl.dart';
 
@@ -26,7 +26,7 @@ class _EditHabitState extends State<EditHabit> {
     _nameController = TextEditingController(text: widget.habit.name);
     return Container(
       decoration: BoxDecoration(
-        color: CupertinoColors.systemBackground.resolveFrom(context),
+        color: Colors.blue,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -41,7 +41,7 @@ class _EditHabitState extends State<EditHabit> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CupertinoButton(
+              TextButton(
                 child: const Text('Cancel'),
                 onPressed: () {
                   Navigator.pop(context);
@@ -49,9 +49,8 @@ class _EditHabitState extends State<EditHabit> {
               ),
               Text(
                 "Edit Habit",
-                style: CupertinoTheme.of(context).textTheme.navTitleTextStyle,
               ),
-              CupertinoButton(
+              TextButton(
                 child: const Text('Save'),
                 onPressed: () {
                   Navigator.pop(context);
@@ -71,11 +70,9 @@ class _EditHabitState extends State<EditHabit> {
               const SizedBox(height: 25.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: CupertinoTextField(
+                child: TextField(
                   maxLength: 50,
                   controller: _nameController,
-                  placeholder: 'Name',
-                  padding: const EdgeInsets.all(16.0),
                 ),
               ),
               const SizedBox(height: 50.0),
