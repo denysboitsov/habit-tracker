@@ -26,7 +26,7 @@ class _EditHabitState extends State<EditHabit> {
     _nameController = TextEditingController(text: widget.habit.name);
     return Container(
       decoration: BoxDecoration(
-        color: Colors.black,
+        color: Color.fromARGB(255, 31, 31, 31),
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),

@@ -7,19 +7,25 @@ void main() {
   runApp(
     MaterialApp(
       theme: ThemeData(
+        splashFactory: NoSplash.splashFactory,
+        iconButtonTheme: IconButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            splashFactory: NoSplash.splashFactory,
+          ),
+        ),
         dialogTheme: const DialogTheme(
-          backgroundColor: Colors.black,
+          backgroundColor: Color.fromARGB(255, 31, 31, 31),
           titleTextStyle: TextStyle(color: Colors.white),
         ),
         popupMenuTheme: const PopupMenuThemeData(
-          color: Color.fromARGB(255, 0, 0, 0),
+          color: Color.fromARGB(255, 31, 31, 31),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(10),
             ),
             side: BorderSide(
               width: 1,
-              color: Color.fromARGB(255, 53, 53, 53),
+              //color: Color.fromARGB(255, 53, 53, 53),
             ),
           ),
         ),
