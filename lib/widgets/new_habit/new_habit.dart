@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:habit_tracker/models/habit.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter/cupertino.dart';
 
 final formatter = DateFormat.yMd();
 
@@ -22,38 +22,16 @@ class _NewHabitState extends State<NewHabit> {
   String startDateButtonText = "Today";
   String endDateButtonText = "No End Date";
 
-  void _showDatePicker(Widget child) {
-    showCupertinoModalPopup<void>(
-      context: context,
-      builder: (BuildContext context) => Container(
-        height: 216,
-        padding: const EdgeInsets.only(top: 6.0),
-        // The Bottom margin is provided to align the popup above the system
-        // navigation bar.
-        margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        // Provide a background color for the popup.
-        color: CupertinoColors.systemBackground.resolveFrom(context),
-        // Use a SafeArea widget to avoid system overlaps.
-        child: SafeArea(
-          top: false,
-          child: child,
-        ),
-      ),
-    );
-  }
 
   void _submitNewHabit() {
     if (_nameController.text.trim().isEmpty) {
-      showCupertinoDialog(
+      showDialog(
         context: context,
-        builder: (BuildContext ctx) => CupertinoAlertDialog(
+        builder: (BuildContext ctx) => AlertDialog(
           title: const Text('Invalid input'),
           content: const Text('Please make sure a valid name was entered.'),
-          actions: <CupertinoDialogAction>[
-            CupertinoDialogAction(
-              isDestructiveAction: false,
+          actions: <Widget>[
+            TextButton(
               onPressed: () {
                 Navigator.pop(ctx);
               },
@@ -65,14 +43,13 @@ class _NewHabitState extends State<NewHabit> {
       return;
     }
     if (endDate != null && !endDate!.isAfter(startDate)) {
-      showCupertinoDialog(
+      showDialog(
         context: context,
-        builder: (BuildContext ctx) => CupertinoAlertDialog(
+        builder: (BuildContext ctx) => AlertDialog(
           title: const Text('Invalid input'),
           content: const Text('Please make sure start date is before end date.'),
-          actions: <CupertinoDialogAction>[
-            CupertinoDialogAction(
-              isDestructiveAction: false,
+          actions: <Widget>[
+            TextButton(
               onPressed: () {
                 Navigator.pop(ctx);
               },
@@ -102,7 +79,7 @@ class _NewHabitState extends State<NewHabit> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: CupertinoColors.systemBackground.resolveFrom(context),
+        color: Colors.black,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -118,7 +95,7 @@ class _NewHabitState extends State<NewHabit> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CupertinoButton(
+              MaterialButton(
                 child: const Text('Cancel'),
                 onPressed: () {
                   Navigator.pop(context);
@@ -126,9 +103,8 @@ class _NewHabitState extends State<NewHabit> {
               ),
               Text(
                 "Add Habit",
-                style: CupertinoTheme.of(context).textTheme.navTitleTextStyle,
               ),
-              CupertinoButton(
+              MaterialButton(
                 child: const Text('Save'),
                 onPressed: () {
                   _submitNewHabit();
@@ -147,20 +123,13 @@ class _NewHabitState extends State<NewHabit> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "Name",
-                      style: CupertinoTheme.of(context)
-                          .textTheme
-                          .navTitleTextStyle
-                          .copyWith(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      
                     ),
                   ),
                 ),
-                CupertinoTextField(
+                TextField(
                   maxLength: 50,
                   controller: _nameController,
-                  padding: const EdgeInsets.all(16.0),
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.width * 0.05,
@@ -174,37 +143,27 @@ class _NewHabitState extends State<NewHabit> {
                           padding: const EdgeInsets.only(bottom: 8.0),
                           child: Text(
                             "Start Date",
-                            style: CupertinoTheme.of(context)
-                                .textTheme
-                                .navTitleTextStyle
-                                .copyWith(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
                           ),
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.4,
                           height: MediaQuery.of(context).size.width * 0.1,
-                          child: CupertinoButton.filled(
+                          child: MaterialButton(
                               padding: const EdgeInsets.all(0),
                               child: Text(startDateButtonText),
-                              onPressed: () {
-                                _showDatePicker(
-                                  CupertinoDatePicker(
-                                    minimumDate: DateTime.now(),
-                                    initialDateTime: DateTime.now(),
-                                    mode: CupertinoDatePickerMode.date,
-                                    use24hFormat: true,
-                                    // This shows day of week alongside day of month
-                                    showDayOfWeek: true,
-                                    // This is called when the user changes the date.
-                                    onDateTimeChanged: (DateTime newDate) {
-                                      startDateButtonText = DateFormat('yyyy-MM-dd').format(newDate).toString();
-                                      setState(() => startDate = newDate);
-                                    },
-                                  ),
+                              onPressed: () async {
+                                DateTime? picked = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2101),
                                 );
+                                if (picked != null && picked != DateTime.now()) {
+                                  setState(() {
+                                    startDate = picked;
+                                    startDateButtonText = DateFormat('yyyy-MM-dd').format(startDate).toString();
+                                  });
+                                }
                               }),
                         ),
                       ],
@@ -216,36 +175,28 @@ class _NewHabitState extends State<NewHabit> {
                           padding: const EdgeInsets.only(bottom: 8.0),
                           child: Text(
                             "End Date",
-                            style: CupertinoTheme.of(context)
-                                .textTheme
-                                .navTitleTextStyle
-                                .copyWith(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            
                           ),
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.4,
                           height: MediaQuery.of(context).size.width * 0.1,
-                          child: CupertinoButton.filled(
+                          child: MaterialButton(
                               padding: const EdgeInsets.all(0),
                               child: Text(endDateButtonText),
-                              onPressed: () {
-                                _showDatePicker(
-                                  CupertinoDatePicker(
-                                    initialDateTime: DateTime.now(),
-                                    mode: CupertinoDatePickerMode.date,
-                                    use24hFormat: true,
-                                    // This shows day of week alongside day of month
-                                    showDayOfWeek: true,
-                                    // This is called when the user changes the date.
-                                    onDateTimeChanged: (DateTime newDate) {
-                                      endDateButtonText = DateFormat('yyyy-MM-dd').format(newDate).toString();
-                                      setState(() => endDate = newDate);
-                                    },
-                                  ),
+                              onPressed: () async {
+                                DateTime? picked = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2101),
                                 );
+                                if (picked != null && picked != DateTime.now()) {
+                                  setState(() {
+                                    endDate = picked;
+                                    endDateButtonText = DateFormat('yyyy-MM-dd').format(startDate).toString();
+                                  });
+                                }
                               }),
                         ),
                       ],

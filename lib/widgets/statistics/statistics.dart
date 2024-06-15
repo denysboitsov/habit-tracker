@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:habit_tracker/helpers/db_helper.dart';
@@ -40,6 +39,7 @@ class StatsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("lAAAl");
     return FutureBuilder<Map<DateTime, int>>(
       future: generateCompletionData(),
       builder: (context, snapshot) {
@@ -59,27 +59,20 @@ class StatsPage extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Year Overview",
-                    style: CupertinoTheme.of(context)
-                        .textTheme
-                        .navLargeTitleTextStyle
-                        .copyWith(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
                   ),
                 ),
                 const SizedBox(
                   height: 14,
                 ),
                 HeatMap(
-                  defaultColor: CupertinoTheme.of(context).primaryContrastingColor,
                   datasets: completionData,
                   colorMode: ColorMode.color,
                   showColorTip: false,
                   scrollable: true,
                   colorsets: {
-                    0: CupertinoTheme.of(context).primaryContrastingColor,
-                    100: CupertinoTheme.of(context).primaryColor,
+                    0: Colors.white,
+                    50: Colors.grey,
+                    100: Colors.black,
                   },
                   onClick: (value) {
                   },

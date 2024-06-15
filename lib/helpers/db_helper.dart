@@ -22,6 +22,7 @@ class DatabaseHelper {
   Future<Database> _initDatabase() async {
     final documentsDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentsDirectory.path, 'your_database.db');
+    print(path);
     //final path =
     //     "/Users/denysartiukhov/Desktop/flutter_projects/habit_tracker_2/db.db";
     // String path = "/Users/denysartiukhov/Desktop/flutter_projects/habit-tracker/habits.db";
