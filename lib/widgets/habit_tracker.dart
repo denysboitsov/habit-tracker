@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/models/habit.dart';
 import 'package:habit_tracker/widgets/habits_list/habits_list.dart';
@@ -72,11 +74,23 @@ class _HabitTrackerState extends State<HabitTracker> {
     ];
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text('Habit Tracker'),
+        flexibleSpace: ClipRRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            child: Container(
+              color: Colors.transparent,
+            ),
+          ),
+        ),
+        title: const Text('Today'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(
+              Icons.add,
+              size: 40.0,
+            ),
             onPressed: () => _openAddHabitOverlay(),
           ),
         ],
@@ -85,8 +99,8 @@ class _HabitTrackerState extends State<HabitTracker> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: Icon(Icons.check_circle),
+            label: 'Today',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.bar_chart),
@@ -94,7 +108,6 @@ class _HabitTrackerState extends State<HabitTracker> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
         onTap: _onItemTapped,
       ),
     );

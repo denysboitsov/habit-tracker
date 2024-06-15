@@ -63,11 +63,21 @@ class HabitsItem extends StatelessWidget {
       items: <PopupMenuEntry<String>>[
         const PopupMenuItem<String>(
           value: 'edit',
-          child: Text('Edit'),
+          child: Text(
+            'Edit',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
         ),
         const PopupMenuItem<String>(
           value: 'delete',
-          child: Text('Delete'),
+          child: Text(
+            'Delete',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
         ),
       ],
     ).then((String? value) {
@@ -104,14 +114,13 @@ class HabitsItem extends StatelessWidget {
           decoration: BoxDecoration(
             color: habit.isCompleted
                 ? const Color.fromARGB(255, 0, 39, 80)
-                : Colors.blue,
-            borderRadius:
-                BorderRadius.circular(15.0), // Customize the radius here
+                : const Color.fromARGB(255, 0, 0, 0),
+            borderRadius: BorderRadius.circular(15.0),
             border: Border.all(
-              color:
-                  habit.isCompleted ? Colors.blue.withOpacity(0) : Colors.blue,
-              // Customize the color here
-              width: 1.0, // Customize the border width if needed
+              color: habit.isCompleted
+                  ? Colors.blue.withOpacity(0)
+                  : Color.fromARGB(255, 53, 53, 53),
+              width: 1.0,
             ),
           ),
           width: MediaQuery.of(context).size.width * 0.48,
@@ -127,6 +136,7 @@ class HabitsItem extends StatelessWidget {
                   children: [
                     Text(
                       habit.name,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ],
                 ),

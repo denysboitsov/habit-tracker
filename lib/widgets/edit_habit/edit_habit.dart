@@ -26,7 +26,7 @@ class _EditHabitState extends State<EditHabit> {
     _nameController = TextEditingController(text: widget.habit.name);
     return Container(
       decoration: BoxDecoration(
-        color: Colors.blue,
+        color: Colors.black,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -42,7 +42,7 @@ class _EditHabitState extends State<EditHabit> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton(
-                child: const Text('Cancel'),
+                child: const Text('Cancel', style: TextStyle(color: Colors.white),),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -51,7 +51,7 @@ class _EditHabitState extends State<EditHabit> {
                 "Edit Habit",
               ),
               TextButton(
-                child: const Text('Save'),
+                child: const Text('Save', style: TextStyle(color: Colors.white),),
                 onPressed: () {
                   Navigator.pop(context);
                   widget.onUpdateHabit(Habit(
@@ -71,8 +71,10 @@ class _EditHabitState extends State<EditHabit> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: TextField(
+                  cursorColor: Colors.white,
                   maxLength: 50,
                   controller: _nameController,
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
               const SizedBox(height: 50.0),
