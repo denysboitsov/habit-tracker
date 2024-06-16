@@ -118,7 +118,7 @@ class HabitsItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(15.0),
             border: Border.all(
               color: habit.isCompleted
-                  ? Colors.blue.withOpacity(0)
+                  ? Colors.transparent
                   : Color.fromARGB(255, 53, 53, 53),
               width: 1.0,
             ),

@@ -89,7 +89,7 @@ class _HabitTrackerState extends State<HabitTracker> {
           IconButton(
             icon: const Icon(
               Icons.add,
-              size: 40.0,
+              size: 30.0,
             ),
             onPressed: () => _openAddHabitOverlay(),
           ),
@@ -97,13 +97,17 @@ class _HabitTrackerState extends State<HabitTracker> {
       ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.check_circle),
+            activeIcon: Icon(Icons.check_circle, size: 30,),
+            icon: Icon(Icons.check_circle_outline, size: 30,),
             label: 'Today',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
+            activeIcon: Icon(Icons.bar_chart, size: 30,),
+            icon: Icon(Icons.bar_chart_outlined, size: 30,),
             label: 'Stats',
           ),
         ],

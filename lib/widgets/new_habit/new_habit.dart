@@ -79,7 +79,7 @@ class _NewHabitState extends State<NewHabit> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 31, 31, 31),
+        color: Theme.of(context).primaryColor,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -96,9 +96,9 @@ class _NewHabitState extends State<NewHabit> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               MaterialButton(
-                child: const Text(
+                child: Text(
                   'Cancel',
-                  style: TextStyle(color: Colors.white),
+                  style: Theme.of(context).textTheme.labelMedium,
                 ),
                 onPressed: () {
                   Navigator.pop(context);
@@ -108,9 +108,9 @@ class _NewHabitState extends State<NewHabit> {
                 "Add Habit",
               ),
               MaterialButton(
-                child: const Text(
+                child: Text(
                   'Save',
-                  style: TextStyle(color: Colors.white),
+                  style: Theme.of(context).textTheme.labelMedium,
                 ),
                 onPressed: () {
                   _submitNewHabit();
@@ -135,6 +135,23 @@ class _NewHabitState extends State<NewHabit> {
                 TextField(
                   maxLength: 50,
                   controller: _nameController,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Color.fromARGB(255, 120, 120, 120), width: 1.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    //suffixIcon: Icon(Icons.clear),
+                    //labelText: 'Habit name',
+                    //hintText: 'Habit name',
+                    //helperText: 'supporting text',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.width * 0.05,
@@ -154,11 +171,26 @@ class _NewHabitState extends State<NewHabit> {
                           width: MediaQuery.of(context).size.width * 0.4,
                           height: MediaQuery.of(context).size.width * 0.1,
                           child: MaterialButton(
-                              color: Colors.blue,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              color: Theme.of(context).primaryColorLight,
                               padding: const EdgeInsets.all(0),
                               child: Text(startDateButtonText),
                               onPressed: () async {
                                 DateTime? picked = await showDatePicker(
+                                  builder: (context, child) {
+                                    return Theme(
+                                        data: Theme.of(context).copyWith(
+                                            colorScheme: Theme.of(context)
+                                                .colorScheme
+                                                .copyWith(
+                                                    onSurface: Colors
+                                                        .white)), //change to your desired color
+                                        child: child!);
+                                  },
                                   context: context,
                                   initialDate: DateTime.now(),
                                   firstDate: DateTime(2000),
@@ -191,11 +223,26 @@ class _NewHabitState extends State<NewHabit> {
                           width: MediaQuery.of(context).size.width * 0.4,
                           height: MediaQuery.of(context).size.width * 0.1,
                           child: MaterialButton(
-                              color: Colors.blue,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              color: Theme.of(context).primaryColorLight,
                               padding: const EdgeInsets.all(0),
                               child: Text(endDateButtonText),
                               onPressed: () async {
                                 DateTime? picked = await showDatePicker(
+                                  builder: (context, child) {
+                                    return Theme(
+                                        data: Theme.of(context).copyWith(
+                                            colorScheme: Theme.of(context)
+                                                .colorScheme
+                                                .copyWith(
+                                                    onSurface: Colors
+                                                        .white)), //change to your desired color
+                                        child: child!);
+                                  },
                                   context: context,
                                   initialDate: DateTime.now(),
                                   firstDate: DateTime(2000),
@@ -206,7 +253,7 @@ class _NewHabitState extends State<NewHabit> {
                                   setState(() {
                                     endDate = picked;
                                     endDateButtonText = DateFormat('yyyy-MM-dd')
-                                        .format(startDate)
+                                        .format(endDate!)
                                         .toString();
                                   });
                                 }
