@@ -26,7 +26,7 @@ class _EditHabitState extends State<EditHabit> {
     _nameController = TextEditingController(text: widget.habit.name);
     return Container(
       decoration: BoxDecoration(
-        color: Colors.blue,
+        color: Theme.of(context).primaryColor,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -42,7 +42,10 @@ class _EditHabitState extends State<EditHabit> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton(
-                child: const Text('Cancel'),
+                child: Text(
+                  'Cancel',
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -51,7 +54,10 @@ class _EditHabitState extends State<EditHabit> {
                 "Edit Habit",
               ),
               TextButton(
-                child: const Text('Save'),
+                child: Text(
+                  'Save',
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
                 onPressed: () {
                   Navigator.pop(context);
                   widget.onUpdateHabit(Habit(
@@ -71,8 +77,26 @@ class _EditHabitState extends State<EditHabit> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: TextField(
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Color.fromARGB(255, 120, 120, 120), width: 1.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    //suffixIcon: Icon(Icons.clear),
+                    //labelText: 'Habit name',
+                    //hintText: 'Habit name',
+                    //helperText: 'supporting text',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                  ),
+                  cursorColor: Colors.white,
                   maxLength: 50,
                   controller: _nameController,
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
               const SizedBox(height: 50.0),

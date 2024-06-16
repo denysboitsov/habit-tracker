@@ -39,7 +39,6 @@ class StatsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("lAAAl");
     return FutureBuilder<Map<DateTime, int>>(
       future: generateCompletionData(),
       builder: (context, snapshot) {
@@ -55,6 +54,7 @@ class StatsPage extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
+                SizedBox(height: MediaQuery.of(context).size.height * 0.11),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -65,14 +65,15 @@ class StatsPage extends StatelessWidget {
                   height: 14,
                 ),
                 HeatMap(
+                  defaultColor: Color.fromARGB(255, 20, 35, 79),
                   datasets: completionData,
                   colorMode: ColorMode.color,
                   showColorTip: false,
                   scrollable: true,
                   colorsets: {
-                    0: Colors.white,
-                    50: Colors.grey,
-                    100: Colors.black,
+                    0: Color.fromARGB(255, 20, 35, 79),
+                    50: Color.fromARGB(255, 35, 60, 135),
+                    100: Color.fromARGB(255, 65, 109, 242),
                   },
                   onClick: (value) {
                   },
