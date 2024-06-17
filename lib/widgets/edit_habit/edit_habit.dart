@@ -50,7 +50,7 @@ class _EditHabitState extends State<EditHabit> {
                   Navigator.pop(context);
                 },
               ),
-              Text(
+              const Text(
                 "Edit Habit",
               ),
               TextButton(
@@ -87,7 +87,7 @@ class _EditHabitState extends State<EditHabit> {
                     //labelText: 'Habit name',
                     //hintText: 'Habit name',
                     //helperText: 'supporting text',
-                    border: OutlineInputBorder(
+                    border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(
                         Radius.circular(10),
                       ),
@@ -96,7 +96,7 @@ class _EditHabitState extends State<EditHabit> {
                   cursorColor: Colors.white,
                   maxLength: 50,
                   controller: _nameController,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
               const SizedBox(height: 50.0),

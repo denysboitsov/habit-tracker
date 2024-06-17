@@ -5,7 +5,6 @@ import 'package:habit_tracker/models/habit.dart';
 import 'package:habit_tracker/widgets/habits_list/habits_list.dart';
 import 'package:habit_tracker/widgets/new_habit/new_habit.dart';
 import 'package:habit_tracker/widgets/statistics/statistics.dart';
-import 'package:intl/intl.dart';
 import 'package:habit_tracker/helpers/db_helper.dart';
 
 class HabitTracker extends StatefulWidget {
@@ -35,24 +34,10 @@ class _HabitTrackerState extends State<HabitTracker> {
     );
   }
 
-  void _toggleHabit(Habit habit) {
-    String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    setState(() {
-      habit.isCompleted = !habit.isCompleted;
-    });
-    DatabaseHelper().toggleCompletion(habit.id, date, habit.isCompleted);
-  }
-
   Future<void> _addHabit(Habit habit) async {
     setState(() {
       DatabaseHelper()
           .addHabit(habit.id, habit.name, habit.startDate, habit.endDate);
-    });
-  }
-
-  Future<void> _updateHabit(Habit habit) async {
-    setState(() {
-      DatabaseHelper().updateHabit(habit.id, habit.name);
     });
   }
 
@@ -65,12 +50,10 @@ class _HabitTrackerState extends State<HabitTracker> {
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
       HabitsList(
-        onToggleHabit: _toggleHabit,
         onRemoveHabit: _removeHabit,
         fetchHabits: DatabaseHelper().getHabits,
-        onUpdateHabit: _updateHabit,
       ),
-      StatsPage(),
+      const StatsPage(),
     ];
 
     return Scaffold(
@@ -84,35 +67,58 @@ class _HabitTrackerState extends State<HabitTracker> {
             ),
           ),
         ),
-        title: const Text('Today'),
-        actions: <Widget>[
+        title: _selectedIndex == 0 ? const Text('Today') : const Text('Statistics'),
+        actions: _selectedIndex == 0 ? <Widget>[
           IconButton(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
             icon: const Icon(
               Icons.add,
               size: 30.0,
             ),
             onPressed: () => _openAddHabitOverlay(),
           ),
-        ],
+        ] : [],
       ),
       body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            activeIcon: Icon(Icons.check_circle, size: 30,),
-            icon: Icon(Icons.check_circle_outline, size: 30,),
-            label: 'Today',
-          ),
-          BottomNavigationBarItem(
-            activeIcon: Icon(Icons.bar_chart, size: 30,),
-            icon: Icon(Icons.bar_chart_outlined, size: 30,),
-            label: 'Stats',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+      bottomNavigationBar: Theme(
+        data: ThemeData(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+        ),
+        child: BottomNavigationBar(
+          selectedItemColor: Colors.blue,
+          unselectedItemColor: const Color.fromARGB(255, 134, 134, 134),
+          backgroundColor: Colors.black,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              activeIcon: Icon(
+                Icons.check_circle,
+                size: 30,
+              ),
+              icon: Icon(
+                Icons.check_circle_outline,
+                size: 30,
+              ),
+              label: 'Today',
+            ),
+            BottomNavigationBarItem(
+              activeIcon: Icon(
+                Icons.bar_chart,
+                size: 30,
+              ),
+              icon: Icon(
+                Icons.bar_chart_outlined,
+                size: 30,
+              ),
+              label: 'Stats',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }

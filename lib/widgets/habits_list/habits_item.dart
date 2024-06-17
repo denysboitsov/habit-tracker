@@ -1,22 +1,42 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:habit_tracker/helpers/db_helper.dart';
 import 'package:habit_tracker/models/habit.dart';
 import 'package:habit_tracker/widgets/edit_habit/edit_habit.dart';
 import 'package:habit_tracker/widgets/habits_list/last_week_heatmap/last_week_heatmap.dart';
+import 'package:intl/intl.dart';
 
-class HabitsItem extends StatelessWidget {
+class HabitsItem extends StatefulWidget {
   const HabitsItem(
     this.habit, {
     super.key,
-    required this.onToggleHabit,
     required this.onRemoveHabit,
-    required this.onUpdateHabit,
   });
 
-  final void Function(Habit habit) onUpdateHabit;
-  final void Function(Habit habit) onToggleHabit;
   final void Function(Habit habit) onRemoveHabit;
   final Habit habit;
+
+  @override
+  State<HabitsItem> createState() {
+    return _HabitsItemState();
+  }
+}
+
+class _HabitsItemState extends State<HabitsItem> {
+  Future<void> _updateHabit(Habit habit) async {
+    setState(() {
+      DatabaseHelper().updateHabit(habit.id, habit.name);
+    });
+  }
+
+  void _toggleHabit(Habit habit) {
+    String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    setState(() {
+      habit.isCompleted = !habit.isCompleted;
+    });
+    DatabaseHelper().toggleCompletion(habit.id, date, habit.isCompleted);
+  }
 
   Future<void> _showDeleteConfirmationDialog(BuildContext context) async {
     showDialog(
@@ -31,7 +51,7 @@ class HabitsItem extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              onRemoveHabit(habit);
+              widget.onRemoveHabit(widget.habit);
               Navigator.pop(context, 'Delete');
             },
             child: const Text('Delete'),
@@ -41,7 +61,7 @@ class HabitsItem extends StatelessWidget {
     );
   }
 
-  Future<void> _showActionSheet(BuildContext context) async {
+  Future<void> _showActionSheet(BuildContext context, Habit habit) async {
     final RenderBox cardRenderBox = context.findRenderObject() as RenderBox;
     final RenderBox overlayRenderBox =
         Overlay.of(context).context.findRenderObject() as RenderBox;
@@ -91,7 +111,8 @@ class HabitsItem extends StatelessWidget {
             barrierColor: Colors.transparent,
             context: context,
             builder: (context) {
-              return EditHabit(habit: habit, onUpdateHabit: onUpdateHabit);
+              return EditHabit(
+                  habit: habit, onUpdateHabit: _updateHabit);
             });
       }
     });
@@ -99,62 +120,77 @@ class HabitsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        HapticFeedback.lightImpact();
-        onToggleHabit(habit);
+    return FutureBuilder<Habit>(
+      future: DatabaseHelper().getHabit(widget.habit),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          final habit = snapshot.data;
+          return GestureDetector(
+            onTap: () {
+              HapticFeedback.lightImpact();
+              _toggleHabit(habit);
+            },
+            onLongPress: () {
+              HapticFeedback.heavyImpact();
+              _showActionSheet(context, habit);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: habit!.isCompleted
+                      ? const Color.fromARGB(255, 0, 39, 80)
+                      : const Color.fromARGB(255, 0, 0, 0),
+                  borderRadius: BorderRadius.circular(13.0),
+                  border: Border.all(
+                    color: habit.isCompleted
+                        ? Colors.transparent
+                        : const Color.fromARGB(255, 53, 53, 53),
+                    width: 1.0,
+                  ),
+                ),
+                width: MediaQuery.of(context).size.width * 0.48,
+                height: MediaQuery.of(context).size.width * 0.24,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 13,
+                    vertical: 13,
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: AutoSizeText(
+                              habit.name,
+                              style: Theme.of(context).textTheme.titleMedium,
+                              overflow: TextOverflow.ellipsis,
+                              minFontSize: 10.0,
+                              maxLines: 1,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                      Row(
+                        children: [
+                          LastWeekHeatmap(
+                            habit,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
       },
-      onLongPress: () {
-        HapticFeedback.heavyImpact();
-        _showActionSheet(context);
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: habit.isCompleted
-                ? const Color.fromARGB(255, 0, 39, 80)
-                : const Color.fromARGB(255, 0, 0, 0),
-            borderRadius: BorderRadius.circular(15.0),
-            border: Border.all(
-              color: habit.isCompleted
-                  ? Colors.transparent
-                  : Color.fromARGB(255, 53, 53, 53),
-              width: 1.0,
-            ),
-          ),
-          width: MediaQuery.of(context).size.width * 0.48,
-          height: MediaQuery.of(context).size.width * 0.24,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 16,
-            ),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      habit.name,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    LastWeekHeatmap(
-                      habit,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
