@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 
 class HabitsList extends StatelessWidget {
   const HabitsList(
-      {super.key, required this.onToggleHabit, required this.onRemoveHabit, required this.fetchHabits, required this.onUpdateHabit,});
+      {super.key, required this.onRemoveHabit, required this.fetchHabits,});
 
-  final void Function(Habit habit) onUpdateHabit;
-  final void Function(Habit habit) onToggleHabit;
   final void Function(Habit habit) onRemoveHabit;
   final Future<List<Habit>> Function() fetchHabits;
 
@@ -34,7 +32,7 @@ class HabitsList extends StatelessWidget {
               crossAxisCount: 2,
               childAspectRatio: (10 / 5),
               children: [
-                ...habits.map((habit) => HabitsItem(habit, onToggleHabit: onToggleHabit, onRemoveHabit: onRemoveHabit, onUpdateHabit: onUpdateHabit,)),
+                ...habits.map((habit) => HabitsItem(habit, onRemoveHabit: onRemoveHabit,)),
               ],
             ),
           );

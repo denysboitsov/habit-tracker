@@ -133,6 +133,39 @@ class DatabaseHelper {
     return habitsList;
   }
 
+  Future<Habit> getHabit(habit) async {
+    String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    final db = await database;
+    var habits = await db.rawQuery('''
+      SELECT 
+        h.HabitID, 
+        h.HabitName,
+        h.StartDate,
+        h.EndDate,
+        c.CompletionDate, 
+        c.Status
+      FROM 
+        Habits h 
+      LEFT JOIN 
+        Completions c ON h.HabitID = c.HabitID AND c.CompletionDate = "$date"
+      WHERE
+        h.HabitID = '${habit.id}';
+    ''');
+
+    final habitsList = List.generate(habits.length, (i) {
+      return Habit(
+        id: habits[i]['HabitID'].toString(),
+        name: habits[i]['HabitName'].toString(),
+        isCompleted: habits[i]['Status'].toString() == "1" ? true : false,
+        startDate: DateTime.parse(habits[i]['StartDate'].toString()),
+        endDate: habits[i]['EndDate'].toString() == "null"
+            ? null
+            : DateTime.parse(habits[i]['EndDate'].toString()),
+      );
+    });
+    return habitsList[0];
+  }
+
   Future<List<Completion>> getCompletions(habit, startDate, endDate) async {
     final db = await database;
     var completions = await db.rawQuery('''

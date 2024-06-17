@@ -14,12 +14,10 @@ class StatsPage extends StatelessWidget {
     DateTime startDate = DateTime.parse('2024-01-01');
     DateTime endDate = DateTime.parse('2024-12-31');
 
-    // Generate random completion counts for each day in the range
     for (int i = 0; i <= endDate.difference(startDate).inDays; i++) {
       DateTime currentDate = startDate.add(Duration(days: i));
       currentDate =
           DateTime(currentDate.year, currentDate.month, currentDate.day);
-      //data[currentDate] = 0;
       var completedHabits = completions
           .where((completion) =>
               completion.isCompleted &&
@@ -32,7 +30,7 @@ class StatsPage extends StatelessWidget {
           ? 0
           : completedHabits.length / allHabits.length * 100;
       data[DateTime(currentDate.year, currentDate.month, currentDate.day)] =
-          completionsPercent.toInt(); // Random completions between 0 and 9
+          completionsPercent.toInt(); 
     }
     return data;
   }
@@ -43,11 +41,9 @@ class StatsPage extends StatelessWidget {
       future: generateCompletionData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Row();
-          //return const Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Row();
-          //return Center(child: Text('Error: ${snapshot.error}'));
+          return Center(child: Text('Error: ${snapshot.error}'));
         } else {
           final completionData = snapshot.data;
           return Padding(
@@ -55,7 +51,7 @@ class StatsPage extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: MediaQuery.of(context).size.height * 0.11),
-                Align(
+                const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Year Overview",
@@ -72,15 +68,15 @@ class StatsPage extends StatelessWidget {
                   scrollable: true,
                   colorsets: {
                     0: Theme.of(context).primaryColor,
-                    1: Color.fromARGB(55, 62, 162, 255),
-                    13: Color.fromARGB(80, 62, 162, 255),
-                    25: Color.fromARGB(105, 62, 162, 255),
-                    38: Color.fromARGB(130, 62, 162, 255),
-                    50: Color.fromARGB(155, 62, 162, 255),
-                    63: Color.fromARGB(180, 62, 162, 255),
-                    75: Color.fromARGB(205, 62, 162, 255),
-                    88: Color.fromARGB(230, 62, 162, 255),
-                    100: Color.fromARGB(255, 62, 162, 255),
+                    1: const Color.fromARGB(55, 62, 162, 255),
+                    13: const Color.fromARGB(80, 62, 162, 255),
+                    25: const Color.fromARGB(105, 62, 162, 255),
+                    38: const Color.fromARGB(130, 62, 162, 255),
+                    50: const Color.fromARGB(155, 62, 162, 255),
+                    63: const Color.fromARGB(180, 62, 162, 255),
+                    75: const Color.fromARGB(205, 62, 162, 255),
+                    88: const Color.fromARGB(230, 62, 162, 255),
+                    100: const Color.fromARGB(255, 62, 162, 255),
                   },
                   onClick: (value) {
                   },

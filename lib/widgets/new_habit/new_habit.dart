@@ -104,7 +104,7 @@ class _NewHabitState extends State<NewHabit> {
                   Navigator.pop(context);
                 },
               ),
-              Text(
+              const Text(
                 "Add Habit",
               ),
               MaterialButton(
@@ -123,8 +123,8 @@ class _NewHabitState extends State<NewHabit> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 8.0),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -146,7 +146,7 @@ class _NewHabitState extends State<NewHabit> {
                     //labelText: 'Habit name',
                     //hintText: 'Habit name',
                     //helperText: 'supporting text',
-                    border: OutlineInputBorder(
+                    border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(
                         Radius.circular(10),
                       ),
@@ -161,8 +161,8 @@ class _NewHabitState extends State<NewHabit> {
                   children: [
                     Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 8.0),
                           child: Text(
                             "Start Date",
                           ),
@@ -171,7 +171,7 @@ class _NewHabitState extends State<NewHabit> {
                           width: MediaQuery.of(context).size.width * 0.4,
                           height: MediaQuery.of(context).size.width * 0.1,
                           child: MaterialButton(
-                              shape: RoundedRectangleBorder(
+                              shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(10),
                                 ),
@@ -213,8 +213,8 @@ class _NewHabitState extends State<NewHabit> {
                     const Spacer(),
                     Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 8.0),
                           child: Text(
                             "End Date",
                           ),
@@ -223,7 +223,7 @@ class _NewHabitState extends State<NewHabit> {
                           width: MediaQuery.of(context).size.width * 0.4,
                           height: MediaQuery.of(context).size.width * 0.1,
                           child: MaterialButton(
-                              shape: RoundedRectangleBorder(
+                              shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(10),
                                 ),
