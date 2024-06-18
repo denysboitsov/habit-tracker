@@ -55,6 +55,10 @@ class StatsPage extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Year Overview",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 const SizedBox(

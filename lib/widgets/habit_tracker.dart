@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:habit_tracker/models/habit.dart';
 import 'package:habit_tracker/widgets/habits_list/habits_list.dart';
 import 'package:habit_tracker/widgets/new_habit/new_habit.dart';
@@ -20,6 +21,7 @@ class _HabitTrackerState extends State<HabitTracker> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
+    HapticFeedback.lightImpact();
     setState(() {
       _selectedIndex = index;
     });
@@ -57,67 +59,81 @@ class _HabitTrackerState extends State<HabitTracker> {
     ];
 
     return Scaffold(
+      extendBody: true,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 0, 0, 0).withOpacity(0.3),
         flexibleSpace: ClipRRect(
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: Container(
               color: Colors.transparent,
             ),
           ),
         ),
-        title: _selectedIndex == 0 ? const Text('Today') : const Text('Statistics'),
-        actions: _selectedIndex == 0 ? <Widget>[
-          IconButton(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            icon: const Icon(
-              Icons.add,
-              size: 30.0,
-            ),
-            onPressed: () => _openAddHabitOverlay(),
-          ),
-        ] : [],
+        title: _selectedIndex == 0
+            ? const Text('Today')
+            : const Text('Statistics'),
+        actions: _selectedIndex == 0
+            ? <Widget>[
+                IconButton(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  icon: const Icon(
+                    Icons.add,
+                    size: 30.0,
+                  ),
+                  onPressed: () {
+                    HapticFeedback.lightImpact();
+                    _openAddHabitOverlay();
+                  },
+                ),
+              ]
+            : [],
       ),
       body: _pages[_selectedIndex],
-      bottomNavigationBar: Theme(
-        data: ThemeData(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-        ),
-        child: BottomNavigationBar(
-          selectedItemColor: Colors.blue,
-          unselectedItemColor: const Color.fromARGB(255, 134, 134, 134),
-          backgroundColor: Colors.black,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              activeIcon: Icon(
-                Icons.check_circle,
-                size: 30,
-              ),
-              icon: Icon(
-                Icons.check_circle_outline,
-                size: 30,
-              ),
-              label: 'Today',
+      bottomNavigationBar: ClipRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Theme(
+            data: ThemeData(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
             ),
-            BottomNavigationBarItem(
-              activeIcon: Icon(
-                Icons.bar_chart,
-                size: 30,
-              ),
-              icon: Icon(
-                Icons.bar_chart_outlined,
-                size: 30,
-              ),
-              label: 'Stats',
+            child: BottomNavigationBar(
+              selectedItemColor: Colors.blue,
+              unselectedItemColor: const Color.fromARGB(255, 134, 134, 134),
+              backgroundColor: Color.fromARGB(255, 0, 0, 0).withOpacity(0.3),
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  activeIcon: Icon(
+                    Icons.check_circle,
+                    size: 30,
+                  ),
+                  icon: Icon(
+                    Icons.check_circle_outline,
+                    size: 30,
+                  ),
+                  label: 'Today',
+                ),
+                BottomNavigationBarItem(
+                  activeIcon: Icon(
+                    Icons.bar_chart,
+                    size: 30,
+                  ),
+                  icon: Icon(
+                    Icons.bar_chart_outlined,
+                    size: 30,
+                  ),
+                  label: 'Stats',
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              onTap: _onItemTapped,
             ),
-          ],
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
+          ),
         ),
       ),
     );
