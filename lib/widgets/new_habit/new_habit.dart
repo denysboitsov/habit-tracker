@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:habit_tracker/models/habit.dart';
 import 'package:intl/intl.dart';
 
@@ -180,6 +181,7 @@ class _NewHabitState extends State<NewHabit> {
                               padding: const EdgeInsets.all(0),
                               child: Text(startDateButtonText),
                               onPressed: () async {
+                                HapticFeedback.lightImpact();
                                 DateTime? picked = await showDatePicker(
                                   builder: (context, child) {
                                     return Theme(
@@ -232,6 +234,7 @@ class _NewHabitState extends State<NewHabit> {
                               padding: const EdgeInsets.all(0),
                               child: Text(endDateButtonText),
                               onPressed: () async {
+                                HapticFeedback.lightImpact();
                                 DateTime? picked = await showDatePicker(
                                   builder: (context, child) {
                                     return Theme(

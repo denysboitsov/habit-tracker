@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:habit_tracker/helpers/db_helper.dart';
+import 'package:habit_tracker/models/completion.dart';
 import 'package:habit_tracker/models/habit.dart';
 import 'package:habit_tracker/widgets/edit_habit/edit_habit.dart';
 import 'package:habit_tracker/widgets/habits_list/last_week_heatmap/last_week_heatmap.dart';
@@ -91,6 +92,15 @@ class _HabitsItemState extends State<HabitsItem> {
           ),
         ),
         const PopupMenuItem<String>(
+          value: 'yesterday',
+          child: Text(
+            'Toggle yesterday',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+        const PopupMenuItem<String>(
           value: 'delete',
           child: Text(
             'Delete',
@@ -100,7 +110,7 @@ class _HabitsItemState extends State<HabitsItem> {
           ),
         ),
       ],
-    ).then((String? value) {
+    ).then((String? value) async {
       if (value == "delete") {
         //Navigator.pop(context);
         _showDeleteConfirmationDialog(context);
@@ -114,6 +124,13 @@ class _HabitsItemState extends State<HabitsItem> {
               return EditHabit(
                   habit: habit, onUpdateHabit: _updateHabit);
             });
+      }
+     if (value == "yesterday") {
+        String yesterdayDate= DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(const Duration(days:1)));
+        List<Completion> completions = await DatabaseHelper().getCompletions(habit, yesterdayDate, yesterdayDate);
+        DatabaseHelper().toggleCompletion(habit.id, yesterdayDate, !completions[0].isCompleted);
+        setState(() {
+        });
       }
     });
   }
@@ -143,13 +160,13 @@ class _HabitsItemState extends State<HabitsItem> {
               child: Container(
                 decoration: BoxDecoration(
                   color: habit!.isCompleted
-                      ? const Color.fromARGB(255, 0, 39, 80)
+                      ? Color.fromARGB(255, 0, 28, 59)
                       : const Color.fromARGB(255, 0, 0, 0),
                   borderRadius: BorderRadius.circular(13.0),
                   border: Border.all(
                     color: habit.isCompleted
                         ? Colors.transparent
-                        : const Color.fromARGB(255, 53, 53, 53),
+                        : Color.fromARGB(255, 43, 43, 43),
                     width: 1.0,
                   ),
                 ),
@@ -167,7 +184,7 @@ class _HabitsItemState extends State<HabitsItem> {
                           Expanded(
                             child: AutoSizeText(
                               habit.name,
-                              style: Theme.of(context).textTheme.titleMedium,
+                              style: Theme.of(context).textTheme.bodyMedium,
                               overflow: TextOverflow.ellipsis,
                               minFontSize: 10.0,
                               maxLines: 1,

@@ -35,7 +35,7 @@ void main() {
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           selectedItemColor: Colors.blue,
           unselectedItemColor: Color.fromARGB(255, 134, 134, 134),
-          backgroundColor: Colors.black,
+          //backgroundColor: Colors.black,
         ),
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.transparent.withAlpha(100),
