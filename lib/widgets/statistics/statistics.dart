@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:habit_tracker/helpers/db_helper.dart';
+import 'package:habit_tracker/widgets/statistics/habit_calendar_heatmap.dart';
 
 class StatsPage extends StatelessWidget {
   const StatsPage({super.key});
@@ -30,41 +31,55 @@ class StatsPage extends StatelessWidget {
           ? 0
           : completedHabits.length / allHabits.length * 100;
       data[DateTime(currentDate.year, currentDate.month, currentDate.day)] =
-          completionsPercent.toInt(); 
+          completionsPercent.toInt();
     }
     return data;
   }
 
+  Future<Map<String, Map<DateTime, int>>> getHabitCompletions() async {
+    var completions = await DatabaseHelper().getAllCompletions();
+    final Map<String, Map<DateTime, int>> allCompletions = {};
+    // var habits = await DatabaseHelper().getHabits();
+
+    for (var i = 0; i < completions.length; i++) {
+      if (allCompletions[completions[i].name] == null) {
+        allCompletions[completions[i].name] = {};
+      }
+      allCompletions[completions[i].name]![completions[i].completionDate] = (completions[i].isCompleted ? 1 : 0);
+    }
+    return allCompletions;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Map<DateTime, int>>(
-      future: generateCompletionData(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else {
-          final completionData = snapshot.data;
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.11),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Year Overview",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 14,
-                ),
-                HeatMap(
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ListView(
+        children: [
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Year Overview",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 14,
+          ),
+          FutureBuilder<Map<DateTime, int>>(
+            future: generateCompletionData(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else {
+                final completionData = snapshot.data;
+                return HeatMap(
+                  fontSize: 16,
                   defaultColor: Theme.of(context).primaryColor,
                   datasets: completionData,
                   colorMode: ColorMode.color,
@@ -82,14 +97,33 @@ class StatsPage extends StatelessWidget {
                     88: const Color.fromARGB(230, 62, 162, 255),
                     100: const Color.fromARGB(255, 62, 162, 255),
                   },
-                  onClick: (value) {
-                  },
-                ),
-              ],
-            ),
-          );
-        }
-      },
+                  onClick: (value) {},
+                );
+              }
+            },
+          ),
+          FutureBuilder<Map<String, Map<DateTime, int>>>(
+              future: getHabitCompletions(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  Map<String, Map<DateTime, int>> completions = {};
+                  if (snapshot.data != null) {
+                    completions.addAll(snapshot.data!);
+                  }
+                  //print(completions);
+                  return Column(
+                    children: [
+                      ...completions.keys.map((completion) => HabitCalendarItem(completions: completions[completion]!),),
+                    ],
+                  );
+                }
+              }),
+        ],
+      ),
     );
   }
 }

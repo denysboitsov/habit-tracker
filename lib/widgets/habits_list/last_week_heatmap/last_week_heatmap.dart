@@ -15,6 +15,7 @@ class LastWeekHeatmap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime startDate = DateTime.now().subtract(const Duration(days: 6));
     return FutureBuilder<List<Completion>>(
       future: DatabaseHelper().getCompletions(
           habit,
