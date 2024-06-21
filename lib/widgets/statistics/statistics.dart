@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:habit_tracker/helpers/db_helper.dart';
-import 'package:habit_tracker/models/completion.dart';
-import 'package:habit_tracker/models/habit.dart';
+import 'package:habit_tracker/widgets/statistics/habit_calendar_heatmap.dart';
 
 class StatsPage extends StatelessWidget {
   const StatsPage({super.key});
@@ -38,23 +36,18 @@ class StatsPage extends StatelessWidget {
     return data;
   }
 
-  Future<Map<String, List<Completion>>> getHabitCompletions() async {
+  Future<Map<String, Map<DateTime, int>>> getHabitCompletions() async {
     var completions = await DatabaseHelper().getAllCompletions();
-    final Map<String, List<Completion>> allCompletions = {};
+    final Map<String, Map<DateTime, int>> allCompletions = {};
     // var habits = await DatabaseHelper().getHabits();
-    
 
-    for(var i = 0; i < completions.length; i++) {
-      if (allCompletions[completions[i].name] != null) {
-        allCompletions[completions[i].name]!.add(completions[i]);
-      } else {
-        allCompletions[completions[i].name] = [completions[i]]; 
+    for (var i = 0; i < completions.length; i++) {
+      if (allCompletions[completions[i].name] == null) {
+        allCompletions[completions[i].name] = {};
       }
+      allCompletions[completions[i].name]![completions[i].completionDate] = (completions[i].isCompleted ? 1 : 0);
     }
-
     return allCompletions;
-
-
   }
 
   @override
@@ -109,48 +102,26 @@ class StatsPage extends StatelessWidget {
               }
             },
           ),
-          FutureBuilder<Map<String, List<Completion>>>(
-            future: getHabitCompletions(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else {
-                final completions = snapshot.data;
-                return HeatMapCalendar(
-                  monthFontSize: 16,
-                  weekFontSize: 12,
-                  weekTextColor: Colors.white,
-                  defaultColor: Theme.of(context).primaryColor,
-                  borderRadius: 10,
-                  showColorTip: false,
-                  flexible: true,
-                  colorMode: ColorMode.color,
-                  datasets: {
-                    DateTime(2021, 1, 6): 3,
-                    DateTime(2021, 1, 7): 7,
-                    DateTime(2021, 1, 8): 10,
-                    DateTime(2021, 1, 9): 13,
-                    DateTime(2021, 1, 13): 6,
-                  },
-                  colorsets: const {
-                    1: Colors.red,
-                    3: Colors.orange,
-                    5: Colors.yellow,
-                    7: Colors.green,
-                    9: Colors.blue,
-                    11: Colors.indigo,
-                    13: Colors.purple,
-                  },
-                  onClick: (value) {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text(value.toString())));
-                  },
-                );
-              }
-            }
-          ),
+          FutureBuilder<Map<String, Map<DateTime, int>>>(
+              future: getHabitCompletions(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  Map<String, Map<DateTime, int>> completions = {};
+                  if (snapshot.data != null) {
+                    completions.addAll(snapshot.data!);
+                  }
+                  //print(completions);
+                  return Column(
+                    children: [
+                      ...completions.keys.map((completion) => HabitCalendarItem(completions: completions[completion]!),),
+                    ],
+                  );
+                }
+              }),
         ],
       ),
     );
