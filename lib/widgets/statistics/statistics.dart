@@ -117,7 +117,7 @@ class StatsPage extends StatelessWidget {
                   //print(completions);
                   return Column(
                     children: [
-                      ...completions.keys.map((completion) => HabitCalendarItem(completions: completions[completion]!),),
+                      ...completions.keys.map((completion) => HabitCalendarItem(completions: completions[completion]!, name: completion),),
                     ],
                   );
                 }

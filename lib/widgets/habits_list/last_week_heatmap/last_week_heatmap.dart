@@ -16,12 +16,13 @@ class LastWeekHeatmap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime startDate = DateTime.now().subtract(const Duration(days: 6));
+    DateTime habitStartDate = habit.startDate;
+    if (startDate.isBefore(habitStartDate)) {
+      startDate = habitStartDate;
+    }
     return FutureBuilder<List<Completion>>(
       future: DatabaseHelper().getCompletions(
-          habit,
-          DateFormat('yyyy-MM-dd')
-              .format(DateTime.now().subtract(const Duration(days: 6))),
-          DateFormat('yyyy-MM-dd').format(DateTime.now())),
+          habit, startDate, DateFormat('yyyy-MM-dd').format(DateTime.now())),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Row(
@@ -31,7 +32,9 @@ class LastWeekHeatmap extends StatelessWidget {
                 height: 15,
                 decoration: BoxDecoration(
                     color: const Color(0xFF0E3311).withOpacity(0),
-                    border: Border.all(color: Colors.blue,),
+                    border: Border.all(
+                      color: Colors.blue,
+                    ),
                     borderRadius: const BorderRadius.all(Radius.circular(4))),
               ),
               const SizedBox(
@@ -42,7 +45,9 @@ class LastWeekHeatmap extends StatelessWidget {
                 height: 15,
                 decoration: BoxDecoration(
                     color: const Color(0xFF0E3311).withOpacity(0),
-                    border: Border.all(color:Colors.blue,),
+                    border: Border.all(
+                      color: Colors.blue,
+                    ),
                     borderRadius: const BorderRadius.all(Radius.circular(4))),
               ),
               const SizedBox(
@@ -109,17 +114,40 @@ class LastWeekHeatmap extends StatelessWidget {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else {
           final completions = snapshot.data!;
+          int i = 7 - completions.length;
+          List<Widget> dummyHeatmapItems = List<Widget>.generate(i, (index) {
+            return Row(
+              children: [
+                Container(
+                  width: 15,
+                  height: 15,
+                  decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 0, 0, 0),
+                      border: Border.all(
+                        color: Color.fromARGB(255, 47, 47, 47),
+                      ),
+                      borderRadius: const BorderRadius.all(Radius.circular(4))),
+                ),
+                const SizedBox(
+                  width: 3,
+                ),
+              ],
+            );
+          });
           return Row(
-            children: completions.map((completion) {
-              return Row(
-                children: [
-                  LastWeekHeatmapItem(completion),
-                  const SizedBox(
-                    width: 3,
-                  )
-                ],
-              );
-            }).toList(),
+            children: [
+              ...dummyHeatmapItems,
+              ...completions.map((completion) {
+                return Row(
+                  children: [
+                    LastWeekHeatmapItem(completion),
+                    const SizedBox(
+                      width: 3,
+                    )
+                  ],
+                );
+              }).toList(),
+            ],
           );
         }
       },
