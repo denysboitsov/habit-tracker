@@ -39,6 +39,30 @@ class _HabitsItemState extends State<HabitsItem> {
     DatabaseHelper().toggleCompletion(habit.id, date, habit.isCompleted);
   }
 
+static int calculateCurrentStreak(List<Completion> completions) {
+    if (completions.isEmpty) {
+      return 0;
+    }
+
+    completions.sort((a, b) => b.completionDate.compareTo(a.completionDate));
+
+    if (completions[0].isCompleted == false) {
+      return 0;
+    }
+
+    int currentStreak = 1;
+
+    for (int i = 1; i < completions.length; i++) {
+      if (completions[i].isCompleted && completions[i-1].isCompleted && i != completions.length - 1) {
+        currentStreak++;
+      } else {
+        break;
+      }
+    }
+
+    return currentStreak;
+  }
+
   Future<void> _showDeleteConfirmationDialog(BuildContext context) async {
     showDialog(
       context: context,
@@ -121,16 +145,17 @@ class _HabitsItemState extends State<HabitsItem> {
             barrierColor: Colors.transparent,
             context: context,
             builder: (context) {
-              return EditHabit(
-                  habit: habit, onUpdateHabit: _updateHabit);
+              return EditHabit(habit: habit, onUpdateHabit: _updateHabit);
             });
       }
-     if (value == "yesterday") {
-        String yesterdayDate= DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(const Duration(days:1)));
-        List<Completion> completions = await DatabaseHelper().getCompletions(habit, yesterdayDate, yesterdayDate);
-        DatabaseHelper().toggleCompletion(habit.id, yesterdayDate, !completions[0].isCompleted);
-        setState(() {
-        });
+      if (value == "yesterday") {
+        String yesterdayDate = DateFormat('yyyy-MM-dd')
+            .format(DateTime.now().subtract(const Duration(days: 1)));
+        List<Completion> completions = await DatabaseHelper()
+            .getCompletions(habit, yesterdayDate, yesterdayDate);
+        DatabaseHelper().toggleCompletion(
+            habit.id, yesterdayDate, !completions[0].isCompleted);
+        setState(() {});
       }
     });
   }
@@ -160,13 +185,13 @@ class _HabitsItemState extends State<HabitsItem> {
               child: Container(
                 decoration: BoxDecoration(
                   color: habit!.isCompleted
-                      ? Color.fromARGB(255, 0, 28, 59)
+                      ? const Color.fromARGB(255, 0, 28, 59)
                       : const Color.fromARGB(255, 0, 0, 0),
                   borderRadius: BorderRadius.circular(13.0),
                   border: Border.all(
                     color: habit.isCompleted
                         ? Colors.transparent
-                        : Color.fromARGB(255, 43, 43, 43),
+                        : const Color.fromARGB(255, 43, 43, 43),
                     width: 1.0,
                   ),
                 ),
@@ -189,6 +214,22 @@ class _HabitsItemState extends State<HabitsItem> {
                               minFontSize: 10.0,
                               maxLines: 1,
                             ),
+                          ),
+                          Icon(Icons.bolt, color: Colors.white),
+                          FutureBuilder<List<Completion>>(
+                            future: DatabaseHelper().getCompletions(
+                                habit, habit.startDate, DateTime.now()),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(child: Text("0"));
+                              } else if (snapshot.hasError) {
+                                return Center(child: Text("0"));
+                              } else {
+                                final completions = snapshot.data;
+                                return completions != null ? Center(child: Text(calculateCurrentStreak(completions).toString())) : Text("0");
+                              }
+                            },
                           ),
                         ],
                       ),

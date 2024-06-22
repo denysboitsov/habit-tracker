@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:habit_tracker/models/habit.dart';
 import 'package:habit_tracker/widgets/habits_list/habits_list.dart';
 import 'package:habit_tracker/widgets/new_habit/new_habit.dart';
+import 'package:habit_tracker/widgets/settings/settings.dart';
 import 'package:habit_tracker/widgets/statistics/statistics.dart';
 import 'package:habit_tracker/helpers/db_helper.dart';
 
@@ -56,6 +57,13 @@ class _HabitTrackerState extends State<HabitTracker> {
         fetchHabits: DatabaseHelper().getHabits,
       ),
       const StatsPage(),
+      const Settings(),
+    ];
+
+    const List<Widget> _titles = [
+      Text("Today"),
+      Text("Analytics"),
+      Text("Settings"),
     ];
 
     return Scaffold(
@@ -71,9 +79,8 @@ class _HabitTrackerState extends State<HabitTracker> {
             ),
           ),
         ),
-        title: _selectedIndex == 0
-            ? const Text('Today')
-            : const Text('Statistics'),
+
+        title: _titles[_selectedIndex],
         actions: _selectedIndex == 0
             ? <Widget>[
                 IconButton(
@@ -128,6 +135,17 @@ class _HabitTrackerState extends State<HabitTracker> {
                     size: 30,
                   ),
                   label: 'Stats',
+                ),
+                BottomNavigationBarItem(
+                  activeIcon: Icon(
+                    Icons.settings_sharp,
+                    size: 30,
+                  ),
+                  icon: Icon(
+                    Icons.settings_sharp,
+                    size: 30,
+                  ),
+                  label: 'Settings',
                 ),
               ],
               currentIndex: _selectedIndex,

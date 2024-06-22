@@ -30,11 +30,11 @@ class HabitCalendarItem extends StatelessWidget {
             ),
           ),
           HeatMapCalendar(
-            textColor: Colors.white,
+            textColor: const Color.fromARGB(255, 0, 0, 0),
             monthFontSize: 16,
             weekFontSize: 12,
             weekTextColor: Colors.white,
-            defaultColor: Theme.of(context).primaryColor,
+            defaultColor: Color.fromARGB(255, 55, 55, 55),
             borderRadius: 10,
             showColorTip: false,
             flexible: true,
