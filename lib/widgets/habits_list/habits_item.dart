@@ -6,6 +6,7 @@ import 'package:habit_tracker/models/completion.dart';
 import 'package:habit_tracker/models/habit.dart';
 import 'package:habit_tracker/widgets/edit_habit/edit_habit.dart';
 import 'package:habit_tracker/widgets/habits_list/last_week_heatmap/last_week_heatmap.dart';
+import 'package:habit_tracker/widgets/habits_list/streak.dart';
 import 'package:intl/intl.dart';
 
 class HabitsItem extends StatefulWidget {
@@ -39,7 +40,7 @@ class _HabitsItemState extends State<HabitsItem> {
     DatabaseHelper().toggleCompletion(habit.id, date, habit.isCompleted);
   }
 
-static int calculateCurrentStreak(List<Completion> completions) {
+  static int calculateCurrentStreak(List<Completion> completions) {
     if (completions.isEmpty) {
       return 0;
     }
@@ -53,7 +54,9 @@ static int calculateCurrentStreak(List<Completion> completions) {
     int currentStreak = 1;
 
     for (int i = 1; i < completions.length; i++) {
-      if (completions[i].isCompleted && completions[i-1].isCompleted && i != completions.length - 1) {
+      if (completions[i].isCompleted &&
+          completions[i - 1].isCompleted &&
+          i != completions.length - 1) {
         currentStreak++;
       } else {
         break;
@@ -124,6 +127,15 @@ static int calculateCurrentStreak(List<Completion> completions) {
             ),
           ),
         ),
+        // const PopupMenuItem<String>(
+        //   value: 'completions',
+        //   child: Text(
+        //     'Past completions',
+        //     style: TextStyle(
+        //       color: Colors.white,
+        //     ),
+        //   ),
+        // ),
         const PopupMenuItem<String>(
           value: 'delete',
           child: Text(
@@ -166,7 +178,7 @@ static int calculateCurrentStreak(List<Completion> completions) {
       future: DatabaseHelper().getHabit(widget.habit),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Row();
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else {
@@ -215,22 +227,7 @@ static int calculateCurrentStreak(List<Completion> completions) {
                               maxLines: 1,
                             ),
                           ),
-                          Icon(Icons.bolt, color: Colors.white),
-                          FutureBuilder<List<Completion>>(
-                            future: DatabaseHelper().getCompletions(
-                                habit, habit.startDate, DateTime.now()),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(child: Text("0"));
-                              } else if (snapshot.hasError) {
-                                return Center(child: Text("0"));
-                              } else {
-                                final completions = snapshot.data;
-                                return completions != null ? Center(child: Text(calculateCurrentStreak(completions).toString())) : Text("0");
-                              }
-                            },
-                          ),
+                          Streak(habit: habit,),
                         ],
                       ),
                       const Spacer(),

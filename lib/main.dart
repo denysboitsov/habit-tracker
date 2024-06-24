@@ -7,6 +7,7 @@ void main() {
   runApp(
     MaterialApp(
       theme: ThemeData(
+        fontFamily: 'SFPro',
         primaryColorLight: Colors.blue,
         primaryColorDark: Colors.black,
         primaryColor: Color.fromARGB(255, 31, 31, 31),
@@ -49,16 +50,30 @@ void main() {
         ),
         scaffoldBackgroundColor: Colors.black,
         textTheme: const TextTheme(
+            bodySmall: TextStyle(
+              fontFamily: 'SFPro',
+              fontSize: 10,
+              color: Color.fromARGB(255, 232, 232, 232),
+            ),
             bodyMedium: TextStyle(
+              fontFamily: 'SFPro',
               fontSize: 16,
               color: Color.fromARGB(255, 232, 232, 232),
             ),
             titleMedium: TextStyle(
-              fontSize: 16,
+              fontFamily: 'SFPro',
+              fontSize: 20,
+              color: Color.fromARGB(255, 232, 232, 232),
+              fontWeight: FontWeight.bold,
+            ),
+            titleLarge: TextStyle(
+              fontFamily: 'SFPro',
+              fontSize: 24,
               color: Color.fromARGB(255, 232, 232, 232),
               fontWeight: FontWeight.bold,
             ),
             labelMedium: TextStyle(
+              fontFamily: 'SFPro',
               fontSize: 16,
               color: Colors.blue,
             )),

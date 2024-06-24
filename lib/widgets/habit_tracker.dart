@@ -60,10 +60,19 @@ class _HabitTrackerState extends State<HabitTracker> {
       const Settings(),
     ];
 
-    const List<Widget> _titles = [
-      Text("Today"),
-      Text("Analytics"),
-      Text("Settings"),
+    List<Widget> _titles = [
+      Text(
+        "Today",
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
+      Text(
+        "Analytics",
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
+      Text(
+        "Settings",
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
     ];
 
     return Scaffold(
@@ -79,7 +88,6 @@ class _HabitTrackerState extends State<HabitTracker> {
             ),
           ),
         ),
-
         title: _titles[_selectedIndex],
         actions: _selectedIndex == 0
             ? <Widget>[

@@ -1,5 +1,6 @@
 import 'package:habit_tracker/models/completion.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 
 class LastWeekHeatmapItem extends StatelessWidget {
@@ -13,6 +14,7 @@ class LastWeekHeatmapItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+          child: Center(child: Text(DateFormat("ccccc").format(completion.completionDate), style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 9, fontWeight: FontWeight.bold),)),
           width: 15,
           height: 15,
           decoration: BoxDecoration(

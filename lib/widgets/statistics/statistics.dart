@@ -45,7 +45,8 @@ class StatsPage extends StatelessWidget {
       if (allCompletions[completions[i].name] == null) {
         allCompletions[completions[i].name] = {};
       }
-      allCompletions[completions[i].name]![completions[i].completionDate] = (completions[i].isCompleted ? 1 : 0);
+      allCompletions[completions[i].name]![completions[i].completionDate] =
+          (completions[i].isCompleted ? 1 : 0);
     }
     return allCompletions;
   }
@@ -56,14 +57,11 @@ class StatsPage extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: ListView(
         children: [
-          const Align(
+          Align(
             alignment: Alignment.centerLeft,
             child: Text(
               "Year Overview",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
           const SizedBox(
@@ -117,7 +115,11 @@ class StatsPage extends StatelessWidget {
                   //print(completions);
                   return Column(
                     children: [
-                      ...completions.keys.map((completion) => HabitCalendarItem(completions: completions[completion]!, name: completion),),
+                      ...completions.keys.map(
+                        (completion) => HabitCalendarItem(
+                            completions: completions[completion]!,
+                            name: completion),
+                      ),
                     ],
                   );
                 }

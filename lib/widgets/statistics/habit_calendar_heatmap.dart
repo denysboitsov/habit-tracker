@@ -23,10 +23,7 @@ class HabitCalendarItem extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               name,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
           HeatMapCalendar(
