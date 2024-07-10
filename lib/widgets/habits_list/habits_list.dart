@@ -32,7 +32,7 @@ class HabitsList extends StatelessWidget {
               crossAxisCount: 2,
               childAspectRatio: (10 / 5),
               children: [
-                ...habits.map((habit) => HabitsItem(habit, onRemoveHabit: onRemoveHabit,)),
+                ...habits.map((habit) => HabitsItemNew(habit, onRemoveHabit: onRemoveHabit,)),
               ],
             ),
           );

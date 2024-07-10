@@ -209,6 +209,18 @@ class DatabaseHelper {
     return completionsList;
   }
 
+  Future<List<Completion>> getCompletionsAllTimeWindow(startDate, endDate) async {
+    List<Habit> habits = await getHabits();
+    List<Completion> completionsList = [];
+
+    for (Habit habit in habits) {
+      completionsList
+          .addAll(await getCompletions(habit, startDate, endDate));
+    }
+    
+    return completionsList;
+  }
+
   Future<List<Completion>> getAllCompletions() async {
     List<Habit> habits = await getHabits();
     List<Completion> completionsList = [];

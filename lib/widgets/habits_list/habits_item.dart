@@ -9,8 +9,8 @@ import 'package:habit_tracker/widgets/habits_list/last_week_heatmap/last_week_he
 import 'package:habit_tracker/widgets/habits_list/streak.dart';
 import 'package:intl/intl.dart';
 
-class HabitsItem extends StatefulWidget {
-  const HabitsItem(
+class HabitsItemNew extends StatefulWidget {
+  const HabitsItemNew(
     this.habit, {
     super.key,
     required this.onRemoveHabit,
@@ -20,12 +20,12 @@ class HabitsItem extends StatefulWidget {
   final Habit habit;
 
   @override
-  State<HabitsItem> createState() {
-    return _HabitsItemState();
+  State<HabitsItemNew> createState() {
+    return _HabitsItemNewState();
   }
 }
 
-class _HabitsItemState extends State<HabitsItem> {
+class _HabitsItemNewState extends State<HabitsItemNew> {
   Future<void> _updateHabit(Habit habit) async {
     setState(() {
       DatabaseHelper().updateHabit(habit.id, habit.name);
