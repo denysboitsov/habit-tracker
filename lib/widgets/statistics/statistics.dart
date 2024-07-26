@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:habit_tracker/helpers/db_helper.dart';
-import 'package:habit_tracker/widgets/statistics/habit_calendar_heatmap.dart';
+import 'package:habit_tracker/widgets/statistics/habit_stats_tile.dart';
 
 class StatsPage extends StatelessWidget {
   const StatsPage({super.key});
@@ -39,7 +39,6 @@ class StatsPage extends StatelessWidget {
   Future<Map<String, Map<DateTime, int>>> getHabitCompletions() async {
     var completions = await DatabaseHelper().getAllCompletions();
     final Map<String, Map<DateTime, int>> allCompletions = {};
-    // var habits = await DatabaseHelper().getHabits();
 
     for (var i = 0; i < completions.length; i++) {
       if (allCompletions[completions[i].name] == null) {
@@ -71,7 +70,7 @@ class StatsPage extends StatelessWidget {
             future: generateCompletionData(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return const Row();
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else {
@@ -84,7 +83,7 @@ class StatsPage extends StatelessWidget {
                   showColorTip: false,
                   scrollable: true,
                   colorsets: {
-                    0: Theme.of(context).primaryColor,
+                    0: const Color.fromARGB(255, 55, 55, 55),
                     1: const Color.fromARGB(55, 62, 162, 255),
                     13: const Color.fromARGB(80, 62, 162, 255),
                     25: const Color.fromARGB(105, 62, 162, 255),
@@ -93,31 +92,29 @@ class StatsPage extends StatelessWidget {
                     63: const Color.fromARGB(180, 62, 162, 255),
                     75: const Color.fromARGB(205, 62, 162, 255),
                     88: const Color.fromARGB(230, 62, 162, 255),
-                    100: const Color.fromARGB(255, 62, 162, 255),
+                    100: Colors.blue,
                   },
                   onClick: (value) {},
                 );
               }
             },
           ),
+          const SizedBox(
+            height: 14,
+          ),
           FutureBuilder<Map<String, Map<DateTime, int>>>(
               future: getHabitCompletions(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Row();
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else {
-                  Map<String, Map<DateTime, int>> completions = {};
-                  if (snapshot.data != null) {
-                    completions.addAll(snapshot.data!);
-                  }
-                  //print(completions);
                   return Column(
                     children: [
-                      ...completions.keys.map(
-                        (completion) => HabitCalendarItem(
-                            completions: completions[completion]!,
+                      ...snapshot.data!.keys.map(
+                        (completion) => HabitStatisticTile(
+                            completions: snapshot.data![completion]!,
                             name: completion),
                       ),
                     ],
