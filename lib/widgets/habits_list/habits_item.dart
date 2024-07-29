@@ -197,13 +197,13 @@ class _HabitsItemNewState extends State<HabitsItemNew> {
               child: Container(
                 decoration: BoxDecoration(
                   color: habit!.isCompleted
-                      ? const Color.fromARGB(255, 0, 28, 59)
-                      : const Color.fromARGB(255, 0, 0, 0),
+                      ? Color.fromARGB(255, 0, 0, 0)
+                      : Color.fromARGB(255, 177, 0, 1),
                   borderRadius: BorderRadius.circular(13.0),
                   border: Border.all(
                     color: habit.isCompleted
-                        ? Colors.transparent
-                        : const Color.fromARGB(255, 43, 43, 43),
+                        ? const Color.fromARGB(255, 43, 43, 43)
+                        : Colors.transparent,
                     width: 1.0,
                   ),
                 ),
@@ -221,13 +221,23 @@ class _HabitsItemNewState extends State<HabitsItemNew> {
                           Expanded(
                             child: AutoSizeText(
                               habit.name,
-                              style: Theme.of(context).textTheme.bodyMedium,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    color: habit.isCompleted
+                                        ? Color.fromARGB(255, 177, 0, 1)
+                                        : Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                               overflow: TextOverflow.ellipsis,
                               minFontSize: 10.0,
                               maxLines: 1,
                             ),
                           ),
-                          Streak(habit: habit,),
+                          Streak(
+                            habit: habit,
+                          ),
                         ],
                       ),
                       const Spacer(),

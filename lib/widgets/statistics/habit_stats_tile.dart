@@ -72,7 +72,7 @@ class HabitStatisticTile extends StatelessWidget {
                         colorMode: ColorMode.color,
                         datasets: completions,
                         colorsets: const {
-                          1: Colors.blue,
+                          1: Color.fromARGB(255, 177, 0, 1),
                         },
                         onClick: (value) {},
                       ),

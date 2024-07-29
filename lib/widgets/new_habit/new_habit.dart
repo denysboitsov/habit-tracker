@@ -99,7 +99,7 @@ class _NewHabitState extends State<NewHabit> {
               MaterialButton(
                 child: Text(
                   'Cancel',
-                  style: Theme.of(context).textTheme.labelMedium,
+                  style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Color.fromARGB(255, 177, 0, 1)),
                 ),
                 onPressed: () {
                   Navigator.pop(context);
@@ -111,7 +111,7 @@ class _NewHabitState extends State<NewHabit> {
               MaterialButton(
                 child: Text(
                   'Save',
-                  style: Theme.of(context).textTheme.labelMedium,
+                  style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Color.fromARGB(255, 177, 0, 1)),
                 ),
                 onPressed: () {
                   _submitNewHabit();
@@ -177,7 +177,7 @@ class _NewHabitState extends State<NewHabit> {
                                   Radius.circular(10),
                                 ),
                               ),
-                              color: Theme.of(context).primaryColorLight,
+                              color: Color.fromARGB(255, 177, 0, 1),
                               padding: const EdgeInsets.all(0),
                               child: Text(startDateButtonText),
                               onPressed: () async {
@@ -230,7 +230,7 @@ class _NewHabitState extends State<NewHabit> {
                                   Radius.circular(10),
                                 ),
                               ),
-                              color: Theme.of(context).primaryColorLight,
+                              color: Color.fromARGB(255, 177, 0, 1),
                               padding: const EdgeInsets.all(0),
                               child: Text(endDateButtonText),
                               onPressed: () async {

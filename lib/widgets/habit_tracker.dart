@@ -117,7 +117,7 @@ class _HabitTrackerState extends State<HabitTracker> {
               highlightColor: Colors.transparent,
             ),
             child: BottomNavigationBar(
-              selectedItemColor: Colors.blue,
+              selectedItemColor: Color.fromARGB(255, 177, 0, 1),
               unselectedItemColor: const Color.fromARGB(255, 134, 134, 134),
               backgroundColor: Color.fromARGB(255, 0, 0, 0).withOpacity(0.3),
               showSelectedLabels: false,

@@ -56,14 +56,14 @@ class Streak extends StatelessWidget {
           return streak > 1
               ? Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.bolt,
-                      color: Colors.white,
+                      color: habit.isCompleted ? Color.fromARGB(255, 177, 0, 1) : Colors.black,
                       size: 17,
                     ),
                     Text(
                       streak.toString(),
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold, color: habit.isCompleted? Color.fromARGB(255, 177, 0, 1) : Colors.black),
                     ),
                   ],
                 )

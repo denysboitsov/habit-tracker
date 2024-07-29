@@ -42,18 +42,16 @@ class _LastWeekHeatmapState extends State<LastWeekHeatmap> {
           List<Widget> dummyHeatmapItems = List<Widget>.generate(i, (index) {
             return Row(
               children: [
-                Container(
-                  width: 15,
-                  height: 15,
-                  decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 0, 0, 0),
-                      border: Border.all(
-                        color: Color.fromARGB(255, 47, 47, 47),
-                      ),
-                      borderRadius: const BorderRadius.all(Radius.circular(4))),
+                SizedBox(
+                  width: 16,
+                  child: Icon(
+                    Icons.circle,
+                    size: 13,
+                    color: widget.habit.isCompleted? Color.fromARGB(255, 177, 0, 1) : Colors.black
+                  ),
                 ),
                 const SizedBox(
-                  width: 3,
+                  width: 5,
                 ),
               ],
             );
@@ -64,9 +62,12 @@ class _LastWeekHeatmapState extends State<LastWeekHeatmap> {
               ...completions.map((completion) {
                 return Row(
                   children: [
-                    LastWeekHeatmapItem(completion),
+                    SizedBox(
+                      width: 16,
+                      child: LastWeekHeatmapItem(completion, widget.habit.isCompleted),
+                    ),
                     const SizedBox(
-                      width: 3,
+                      width: 5,
                     )
                   ],
                 );

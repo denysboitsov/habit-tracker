@@ -44,7 +44,7 @@ class _EditHabitState extends State<EditHabit> {
               TextButton(
                 child: Text(
                   'Cancel',
-                  style: Theme.of(context).textTheme.labelMedium,
+                  style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Color.fromARGB(255, 177, 0, 1)),
                 ),
                 onPressed: () {
                   Navigator.pop(context);
@@ -56,7 +56,7 @@ class _EditHabitState extends State<EditHabit> {
               TextButton(
                 child: Text(
                   'Save',
-                  style: Theme.of(context).textTheme.labelMedium,
+                  style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Color.fromARGB(255, 177, 0, 1)),
                 ),
                 onPressed: () {
                   Navigator.pop(context);
