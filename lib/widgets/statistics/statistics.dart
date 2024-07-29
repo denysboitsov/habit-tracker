@@ -36,6 +36,26 @@ class StatsPage extends StatelessWidget {
     return data;
   }
 
+  List<Map<String, Map>> splitMap(Map<String, Map> map) {
+    int length = map.length;
+    int midpoint = (length + 1) ~/ 2; // Divide and round up
+
+    Map<String, Map> firstMap = {};
+    Map<String, Map> secondMap = {};
+
+    int index = 0;
+    map.forEach((key, value) {
+      if (index < midpoint) {
+        firstMap[key] = value;
+      } else {
+        secondMap[key] = value;
+      }
+      index++;
+    });
+
+    return [firstMap, secondMap];
+  }
+
   Future<Map<String, Map<DateTime, int>>> getHabitCompletions() async {
     var completions = await DatabaseHelper().getAllCompletions();
     final Map<String, Map<DateTime, int>> allCompletions = {};
@@ -110,12 +130,29 @@ class StatsPage extends StatelessWidget {
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else {
-                  return Column(
+                  Map<String, Map<DateTime, int>> completions = snapshot.data!;
+                  List<Map<String, Map>> splitMaps = splitMap(completions);
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ...snapshot.data!.keys.map(
-                        (completion) => HabitStatisticTile(
-                            completions: snapshot.data![completion]!,
-                            name: completion),
+                      Column(
+                        children: [
+                          ...splitMaps[0].keys.map(
+                            (completion) => HabitStatisticTile(
+                                completions: snapshot.data![completion]!,
+                                name: completion),
+                          ),
+                        ],
+                      ),
+                      Spacer(),
+                      Column(
+                        children: [
+                          ...splitMaps[1].keys.map(
+                            (completion) => HabitStatisticTile(
+                                completions: snapshot.data![completion]!,
+                                name: completion),
+                          ),
+                        ],
                       ),
                     ],
                   );
