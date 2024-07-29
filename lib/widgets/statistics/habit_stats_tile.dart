@@ -26,7 +26,7 @@ class HabitStatisticTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.45,
-      height: MediaQuery.of(context).size.width * 0.65,
+      height: MediaQuery.of(context).size.width * 0.6,
       child: Padding(
         padding: const EdgeInsets.only(top: 5, bottom: 5),
         child: Container(
@@ -49,6 +49,7 @@ class HabitStatisticTile extends StatelessWidget {
                             name,
                             style: Theme.of(context).textTheme.titleMedium,
                             overflow: TextOverflow.ellipsis,
+                            maxFontSize: 14,
                             minFontSize: 10.0,
                             maxLines: 1,
                           ),

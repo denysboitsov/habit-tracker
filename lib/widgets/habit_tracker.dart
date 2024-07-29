@@ -23,9 +23,11 @@ class _HabitTrackerState extends State<HabitTracker> {
 
   void _onItemTapped(int index) {
     HapticFeedback.lightImpact();
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (_selectedIndex != index) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   void _openAddHabitOverlay() {
@@ -38,7 +40,8 @@ class _HabitTrackerState extends State<HabitTracker> {
   }
 
   Future<void> _addHabit(Habit habit) async {
-    await DatabaseHelper().addHabit(habit.id, habit.name, habit.startDate, habit.endDate);
+    await DatabaseHelper()
+        .addHabit(habit.id, habit.name, habit.startDate, habit.endDate);
     setState(() {});
   }
 
