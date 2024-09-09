@@ -3,7 +3,7 @@
 
 Main Screen                |  Statistics Screen        | New Habit Popup           |
 :-------------------------:|:-------------------------:|:-------------------------:|
-<img src="https://github.com/denysartiukhov/habit-tracker/assets/108905117/6791d832-0df5-4a39-91c9-63a89ba89b77" width="200"> |  <img src="https://github.com/denysartiukhov/habit-tracker/assets/108905117/cca38829-1bbb-4b87-abac-99b9e9c5b15d" width="200"> | <img src="https://github.com/denysartiukhov/habit-tracker/assets/108905117/3bbb636d-c5d3-40e7-b199-b5b7b1aa8842" width="200">
+<img src="https://github.com/user-attachments/assets/37645244-845f-4ea4-bcac-36575be09ee6" width="200"> |  <img src="https://github.com/user-attachments/assets/f0070a16-a89a-4a58-9d26-bed4e1c6b98d" width="200"> | <img src="https://github.com/user-attachments/assets/0ff9206b-ae9a-4c86-888e-03d104cbe5ea" width="200">
 
 A simple Flutter application to track and manage your habits. This app allows you to add habits, mark them as completed daily, and visualize your progress through a heatmap of completions.
 
